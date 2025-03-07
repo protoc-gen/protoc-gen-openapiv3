@@ -1,0 +1,21 @@
+.PHONY: init
+# init env
+init:
+	go mod tidy
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.3
+
+.PHONY: example
+# generate example
+example:
+	go install . && \
+	protoc --proto_path=. \
+		   --proto_path=./third_party \
+		   --openapiv3_out=paths=source_relative:. \
+		   --openapiv3_opt=openapi_out_path=./example \
+		   ./example/*.proto
+
+.PHONY: all
+# generate all
+all:
+	make example;
+	go mod tidy;

@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+package auth.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/protoc-gen/protoc-gen-openapiv3/example/api/auth/v1;v1";
+
+service AuthService {
+	rpc SignIn (SignInRequest) returns (SignInResponse) {
+		option (google.api.http) = {
+			post: "/api/v1/auth/sign-in/password"
+			body: "*"
+		};
+	};
+	rpc SignInWithOAuth (SignInWithOAuthRequest) returns (SignInWithOAuthResponse) {
+		option (google.api.http) = {
+			post: "/api/v1/auth/sign-in/oauth"
+			body: "*"
+		};
+	};
+	rpc SignUp (SignUpRequest) returns (SignUpResponse) {
+		option (google.api.http) = {
+			post: "/api/v1/auth/sign-up"
+			body: "*"
+		};
+	};
+	rpc RequestPasswordReset (RequestPasswordResetRequest) returns (RequestPasswordResetResponse) {
+		option (google.api.http) = {
+			post: "/api/v1/auth/request-password-reset"
+			body: "*"
+		};
+	}
+	rpc VerifyPasswordResetToken (VerifyPasswordResetTokenRequest) returns (VerifyPasswordResetTokenResponse) {
+		option (google.api.http) = {
+			get: "/api/v1/auth/verify-password-reset-token"
+		};
+	}
+	rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse) {
+		option (google.api.http) = {
+			post: "/api/v1/auth/reset-password"
+			body: "*"
+		};
+	}
+	rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse) {
+		option (google.api.http) = {
+			post: "/api/v1/auth/refresh-token"
+			body: "*"
+		};
+	};
+	// GetSmsAuthTokens get sms auth tokens
+	rpc GetSmsAuthTokens (GetSmsAuthTokensRequest) returns (GetSmsAuthTokensResponse) {
+		option (google.api.http) = {
+			post: "/api/v1/auth/sms-auth-tokens"
+			body: "*"
+		};
+	}
+
+	// VerifySmsCode verifies the SMS code
+	rpc VerifySmsCode (VerifySmsCodeRequest) returns (VerifySmsCodeResponse) {
+		option (google.api.http) = {
+			post: "/api/v1/auth/verify-sms-code"
+			body: "*"
+		};
+	}
+}
+
+message SignInRequest {
+	string email = 1;
+	string password = 2;
+}
+
+message SignInResponse {
+	string token = 1;
+	string refresh_token = 2;
+	double expires_in = 3; // in seconds
+}
+
+enum OAuthProvider {
+	GOOGLE = 0;
+	GITHUB = 1;
+	WECHAT = 2;
+}
+
+message SignInWithOAuthRequest {
+	OAuthProvider provider = 1;
+	string code = 2;
+}
+
+message SignInWithOAuthResponse {
+	string token = 1;
+}
+
+message SignUpRequest {
+	string email = 1;
+	string password = 2;
+}
+
+message SignUpResponse {
+	string token = 1;
+	string refresh_token = 2;
+	double expires_in = 3; // in seconds
+}
+
+message RequestPasswordResetRequest {
+	string email = 1;
+}
+
+message RequestPasswordResetResponse {
+	string status = 1;
+}
+
+message VerifyPasswordResetTokenRequest {
+	string token = 1;
+}
+
+message VerifyPasswordResetTokenResponse {
+	bool valid = 1;
+}
+
+message ResetPasswordRequest {
+	string token = 1;
+	string new_password = 2;
+}
+
+message ResetPasswordResponse {
+	string status = 1;
+}
+
+message RefreshTokenRequest {
+	string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+	string token = 1;
+	double expires_in = 2; // in seconds
+}
+
+message GetSmsAuthTokensRequest {}
+message GetSmsAuthTokensResponse {
+	string biz_token = 1;
+	int64 expire_time = 2;
+	string  sts_access_key_id = 3;
+	string sts_access_key_secret = 4;
+	string sts_token = 5;
+}
+
+message VerifySmsCodeRequest {
+	string phone_number = 1;
+	string sms_code = 2;
+	string sms_token = 3;
+}
+message VerifySmsCodeResponse {
+	string token = 1;
+	double expires_in = 2; // in seconds
+}
