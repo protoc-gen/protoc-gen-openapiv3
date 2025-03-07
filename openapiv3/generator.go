@@ -2,12 +2,13 @@ package openapiv3
 
 import (
 	"fmt"
+	"google.golang.org/genproto/googleapis/api/annotations"
+	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/proto"
+	"gopkg.in/yaml.v3"
 	"os"
 	"path"
 	"strings"
-
-	"google.golang.org/protobuf/compiler/protogen"
-	"gopkg.in/yaml.v3"
 )
 
 // GenerateFile traverses all proto files and generates the OpenAPI specification file
@@ -35,11 +36,30 @@ func GenerateFile(gen *protogen.Plugin) {
 		if file.Generate {
 			// Traverse each service in the file
 			for _, service := range file.Services {
-				// Create a base path for the service
-				servicePath := "/" + service.GoName
 				for _, method := range service.Methods {
+					httpRule := proto.GetExtension(method.Desc.Options(), annotations.E_Http).(*annotations.HttpRule)
+					var methodPath string
+					var httpMethod string
+					if httpRule != nil {
+						switch pattern := httpRule.Pattern.(type) {
+						case *annotations.HttpRule_Post:
+							methodPath = pattern.Post
+							httpMethod = "post"
+						case *annotations.HttpRule_Get:
+							methodPath = pattern.Get
+							httpMethod = "get"
+						case *annotations.HttpRule_Put:
+							methodPath = pattern.Put
+							httpMethod = "put"
+						case *annotations.HttpRule_Delete:
+							methodPath = pattern.Delete
+							httpMethod = "delete"
+						case *annotations.HttpRule_Patch:
+							methodPath = pattern.Patch
+							httpMethod = "patch"
+						}
+					}
 					// Generate OpenAPI path for each method under the service
-					methodPath := fmt.Sprintf("%s/%s", servicePath, method.GoName)
 					operation := map[string]interface{}{
 						"tags":        []string{service.GoName},
 						"operationId": fmt.Sprintf("%s_%s", service.GoName, method.GoName),
@@ -70,7 +90,7 @@ func GenerateFile(gen *protogen.Plugin) {
 
 					// Add operation to paths
 					paths[methodPath] = map[string]interface{}{
-						"post": operation,
+						httpMethod: operation,
 					}
 
 					// Generate schema for Input and Output
