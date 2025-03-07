@@ -442,6 +442,22 @@ paths:
                     description: Successful Response
             tags:
                 - TripService
+        post:
+            operationId: TripService_CreateTrip
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateTripRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateTripRequest'
+                    description: Successful Response
+            tags:
+                - TripService
     /api/v1/trips/{id}:
         delete:
             operationId: TripService_DeleteTrip
@@ -456,6 +472,38 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DeleteTripRequest'
+                    description: Successful Response
+            tags:
+                - TripService
+        get:
+            operationId: TripService_GetTrip
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetTripRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetTripRequest'
+                    description: Successful Response
+            tags:
+                - TripService
+        put:
+            operationId: TripService_UpdateTrip
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateTripRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateTripRequest'
                     description: Successful Response
             tags:
                 - TripService
@@ -476,6 +524,22 @@ paths:
                     description: Successful Response
             tags:
                 - TripService
+        post:
+            operationId: TripService_CreateDailyTrip
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateDailyTripRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateDailyTripRequest'
+                    description: Successful Response
+            tags:
+                - TripService
     /api/v1/trips/{trip_id}/daily/{daily_id}:
         delete:
             operationId: TripService_DeleteDailyTrip
@@ -490,6 +554,38 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DeleteDailyTripRequest'
+                    description: Successful Response
+            tags:
+                - TripService
+        get:
+            operationId: TripService_GetDailyTrip
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetDailyTripRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetDailyTripRequest'
+                    description: Successful Response
+            tags:
+                - TripService
+        put:
+            operationId: TripService_UpdateDailyTrip
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateDailyTripRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateDailyTripRequest'
                     description: Successful Response
             tags:
                 - TripService

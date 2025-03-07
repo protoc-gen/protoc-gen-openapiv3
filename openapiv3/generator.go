@@ -23,7 +23,7 @@ func GenerateFile(gen *protogen.Plugin) {
 	}
 
 	// Middle part for paths
-	paths := make(map[string]interface{})
+	paths := make(map[string]map[string]interface{})
 	openAPI["paths"] = paths
 
 	// Components part, will be added at the end
@@ -109,9 +109,10 @@ func GenerateFile(gen *protogen.Plugin) {
 					}
 
 					// Add operation to paths
-					paths[methodPath] = map[string]interface{}{
-						httpMethod: operation,
+					if _, ok := paths[methodPath]; !ok {
+						paths[methodPath] = make(map[string]interface{})
 					}
+					paths[methodPath][httpMethod] = operation
 
 					// Generate schema for Input and Output
 					addMessageSchema(openAPI, method.Input)
