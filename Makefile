@@ -20,6 +20,7 @@ example:
 		   --proto_path=./third_party \
 		   --openapiv3_out=paths=source_relative:. \
 		   --openapiv3_opt=openapi_out_path=./example \
+		   --openapiv3_opt=servers='https://localhost:8000|Dev Server;https://localhost:9000|Prod Server' \
 		   ./example/*.proto
 
 .PHONY: all

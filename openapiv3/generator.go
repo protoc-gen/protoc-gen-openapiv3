@@ -22,6 +22,11 @@ func GenerateFile(gen *protogen.Plugin) {
 		"version":     "1.0.0",
 	}
 
+	servers := parseServersOption(gen)
+	if len(servers) > 0 {
+		openAPI["servers"] = servers
+	}
+
 	// Middle part for paths
 	paths := make(map[string]map[string]interface{})
 	openAPI["paths"] = paths
@@ -178,4 +183,28 @@ func getOutputFilename(gen *protogen.Plugin) string {
 	}
 
 	return filename
+}
+
+// parseServersOption parses the servers option from the plugin options
+func parseServersOption(gen *protogen.Plugin) []map[string]interface{} {
+	parts := strings.Split(gen.Request.GetParameter(), ",")
+	servers := make([]map[string]interface{}, 0)
+	for _, part := range parts {
+		if strings.HasPrefix(part, "servers=") {
+			for _, server := range strings.Split(strings.TrimPrefix(part, "servers="), ";") {
+				info := strings.Split(server, "|")
+				if len(info) == 2 {
+					servers = append(servers, map[string]interface{}{
+						"url":         info[0],
+						"description": info[1],
+					})
+				} else {
+					servers = append(servers, map[string]interface{}{
+						"url": info[0],
+					})
+				}
+			}
+		}
+	}
+	return servers
 }
