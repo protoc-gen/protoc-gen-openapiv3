@@ -41,6 +41,7 @@ func GenerateFile(gen *protogen.Plugin) {
 					// Generate OpenAPI path for each method under the service
 					methodPath := fmt.Sprintf("%s/%s", servicePath, method.GoName)
 					operation := map[string]interface{}{
+						"tags":        []string{service.GoName},
 						"operationId": fmt.Sprintf("%s_%s", service.GoName, method.GoName),
 						"responses": map[string]interface{}{
 							"200": map[string]interface{}{
