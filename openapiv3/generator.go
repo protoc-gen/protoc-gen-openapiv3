@@ -29,7 +29,21 @@ func GenerateFile(gen *protogen.Plugin) {
 	// Components part, will be added at the end
 	components := make(map[string]interface{})
 	components["schemas"] = make(map[string]interface{})
+	components["securitySchemes"] = map[string]interface{}{
+		"BearerAuth": map[string]interface{}{
+			"type":         "http",
+			"scheme":       "bearer",
+			"bearerFormat": "JWT",
+		},
+	}
 	openAPI["components"] = components
+
+	// Security part
+	openAPI["security"] = []map[string]interface{}{
+		{
+			"BearerAuth": []interface{}{},
+		},
+	}
 
 	// Traverse all proto files
 	for _, file := range gen.Files {
@@ -75,6 +89,12 @@ func GenerateFile(gen *protogen.Plugin) {
 								},
 							},
 						},
+					}
+
+					// Check if openapiv3.skip_token is true
+					skipToken := proto.GetExtension(method.Desc.Options(), E_SkipToken).(bool)
+					if skipToken {
+						operation["security"] = []map[string]interface{}{}
 					}
 
 					// Generate OpenAPI request body for each method

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package openapiv3;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/protoc-gen/protoc-gen-openapiv3/openapiv3;openapiv3";
+
+extend google.protobuf.MethodOptions {
+  bool skip_token = 50000;
+}

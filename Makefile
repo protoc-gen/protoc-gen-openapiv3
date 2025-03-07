@@ -4,6 +4,14 @@ init:
 	go mod tidy
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.3
 
+.PHONY: openapiv3
+# generate openapiv3
+openapiv3:
+	protoc --proto_path=./openapiv3 \
+		   --proto_path=./third_party \
+		   --go_out=paths=source_relative:./openapiv3 \
+		   ./openapiv3/*.proto
+
 .PHONY: example
 # generate example
 example:
@@ -17,5 +25,6 @@ example:
 .PHONY: all
 # generate all
 all:
+	make openapiv3;
 	make example;
 	go mod tidy;

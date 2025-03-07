@@ -252,6 +252,11 @@ components:
                 Token:
                     type: string
             type: object
+    securitySchemes:
+        BearerAuth:
+            bearerFormat: JWT
+            scheme: bearer
+            type: http
 info:
     description: API generated from protobufs
     title: Generated API
@@ -273,6 +278,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/RefreshTokenRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/auth/request-password-reset:
@@ -290,6 +296,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/RequestPasswordResetRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/auth/reset-password:
@@ -307,6 +314,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ResetPasswordRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/auth/sign-in/oauth:
@@ -324,6 +332,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/SignInWithOAuthRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/auth/sign-in/password:
@@ -341,6 +350,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/SignInRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/auth/sign-up:
@@ -358,6 +368,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/SignUpRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/auth/sms-auth-tokens:
@@ -375,6 +386,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/GetSmsAuthTokensRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/auth/verify-password-reset-token:
@@ -392,6 +404,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/VerifyPasswordResetTokenRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/auth/verify-sms-code:
@@ -409,6 +422,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/VerifySmsCodeRequest'
                     description: Successful Response
+            security: []
             tags:
                 - AuthService
     /api/v1/trips:
@@ -479,3 +493,5 @@ paths:
                     description: Successful Response
             tags:
                 - TripService
+security:
+    - BearerAuth: []
