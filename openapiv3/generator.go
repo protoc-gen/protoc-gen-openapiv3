@@ -34,7 +34,57 @@ func GenerateFile(gen *protogen.Plugin) {
 
 	// Components part, will be added at the end
 	components := make(map[string]any)
-	components["schemas"] = make(map[string]any)
+	commonResp := map[string]any{
+		"type": "object",
+		"properties": map[string]any{
+			"code": map[string]any{
+				"type": "integer",
+			},
+			"message": map[string]any{
+				"type": "string",
+			},
+			"details": map[string]any{
+				"type": "array",
+				"items": map[string]any{
+					"type": "object",
+					"properties": map[string]any{
+						"@type": map[string]any{
+							"type": "string",
+						},
+						"reason": map[string]any{
+							"type": "string",
+						},
+						"domain": map[string]any{
+							"type": "string",
+						},
+						"metadata": map[string]any{
+							"type": "object",
+						},
+					},
+				},
+			},
+		},
+		"example": map[string]any{
+			"code":    3,
+			"message": "must be at least 11 characters long",
+			"details": []map[string]any{
+				{
+					"@type":  "type.googleapis.com/google.rpc.ErrorInfo",
+					"reason": "INVALID_PARAMETERS",
+					"domain": "",
+					"metadata": map[string]any{
+						"field": "phoneNumber",
+					},
+				},
+			},
+		},
+	}
+	// {"code":3, "message":"Request is invalid", "details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo", "reason":"BAD_REQUEST", "domain":"", "metadata":{}}]}%
+	components["schemas"] = map[string]any{
+		"BadRequest":          commonResp,
+		"Unauthorized":        commonResp,
+		"InternalServerError": commonResp,
+	}
 	components["securitySchemes"] = map[string]any{
 		"BearerAuth": map[string]any{
 			"type":         "http",
@@ -256,6 +306,36 @@ func getResponseBody(message *protogen.Message) map[string]any {
 				"application/json": map[string]any{
 					"schema": map[string]any{
 						"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(message)),
+					},
+				},
+			},
+		},
+		"400": map[string]any{
+			"description": "Bad Request",
+			"content": map[string]any{
+				"application/json": map[string]any{
+					"schema": map[string]any{
+						"$ref": "#/components/schemas/BadRequest",
+					},
+				},
+			},
+		},
+		"401": map[string]any{
+			"description": "Unauthorized",
+			"content": map[string]any{
+				"application/json": map[string]any{
+					"schema": map[string]any{
+						"$ref": "#/components/schemas/Unauthorized",
+					},
+				},
+			},
+		},
+		"500": map[string]any{
+			"description": "Internal Server Error",
+			"content": map[string]any{
+				"application/json": map[string]any{
+					"schema": map[string]any{
+						"$ref": "#/components/schemas/InternalServerError",
 					},
 				},
 			},

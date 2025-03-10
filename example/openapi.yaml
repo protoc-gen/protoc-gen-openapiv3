@@ -1,5 +1,92 @@
 components:
     schemas:
+        BadRequest:
+            example:
+                code: 3
+                details:
+                    - '@type': type.googleapis.com/google.rpc.ErrorInfo
+                      domain: ""
+                      metadata:
+                        field: phoneNumber
+                      reason: INVALID_PARAMETERS
+                message: must be at least 11 characters long
+            properties:
+                code:
+                    type: integer
+                details:
+                    items:
+                        properties:
+                            '@type':
+                                type: string
+                            domain:
+                                type: string
+                            metadata:
+                                type: object
+                            reason:
+                                type: string
+                        type: object
+                    type: array
+                message:
+                    type: string
+            type: object
+        InternalServerError:
+            example:
+                code: 3
+                details:
+                    - '@type': type.googleapis.com/google.rpc.ErrorInfo
+                      domain: ""
+                      metadata:
+                        field: phoneNumber
+                      reason: INVALID_PARAMETERS
+                message: must be at least 11 characters long
+            properties:
+                code:
+                    type: integer
+                details:
+                    items:
+                        properties:
+                            '@type':
+                                type: string
+                            domain:
+                                type: string
+                            metadata:
+                                type: object
+                            reason:
+                                type: string
+                        type: object
+                    type: array
+                message:
+                    type: string
+            type: object
+        Unauthorized:
+            example:
+                code: 3
+                details:
+                    - '@type': type.googleapis.com/google.rpc.ErrorInfo
+                      domain: ""
+                      metadata:
+                        field: phoneNumber
+                      reason: INVALID_PARAMETERS
+                message: must be at least 11 characters long
+            properties:
+                code:
+                    type: integer
+                details:
+                    items:
+                        properties:
+                            '@type':
+                                type: string
+                            domain:
+                                type: string
+                            metadata:
+                                type: object
+                            reason:
+                                type: string
+                        type: object
+                    type: array
+                message:
+                    type: string
+            type: object
         auth.v1.OneClickLoginRequest:
             example:
                 token: ""
@@ -457,6 +544,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.OneClickLoginResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -475,6 +580,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.RefreshTokenResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -492,6 +615,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.RefreshTokenResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -510,6 +651,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.RequestPasswordResetResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -528,6 +687,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.ResetPasswordResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -546,6 +723,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.SendSmsCodeResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -564,6 +759,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.SignInWithOAuthResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -582,6 +795,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.SignInResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -600,6 +831,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.SignUpResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -618,6 +867,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.VerifyPasswordResetTokenResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -636,6 +903,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.VerifySmsCodeResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             security: []
             tags:
                 - Auth Service
@@ -654,6 +939,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.ListTripsResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
         post:
@@ -670,6 +973,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.CreateTripResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
     /api/v1/trips/{id}:
@@ -687,6 +1008,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.DeleteTripResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
         get:
@@ -703,6 +1042,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.GetTripResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
         put:
@@ -719,6 +1076,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.UpdateTripResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
     /api/v1/trips/{trip_id}/daily:
@@ -736,6 +1111,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.ListDailyTripsResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
         post:
@@ -752,6 +1145,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.CreateDailyTripResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
     /api/v1/trips/{trip_id}/daily/{daily_id}:
@@ -769,6 +1180,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.DeleteDailyTripResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
         get:
@@ -785,6 +1214,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.GetDailyTripResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
         put:
@@ -801,6 +1248,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/trip.v1.UpdateDailyTripResponse'
                     description: OK
+                "400":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BadRequest'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Unauthorized'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InternalServerError'
+                    description: Internal Server Error
             tags:
                 - TripService
 security:
