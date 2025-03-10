@@ -2,6 +2,7 @@ package openapiv3
 
 import (
 	"fmt"
+	"github.com/protoc-gen/protoc-gen-openapiv3/pkg/helper"
 	"google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
@@ -88,7 +89,7 @@ func GenerateFile(gen *protogen.Plugin) {
 								"content": map[string]interface{}{
 									"application/json": map[string]interface{}{
 										"schema": map[string]interface{}{
-											"$ref": fmt.Sprintf("#/components/schemas/%s", method.Input.GoIdent.GoName),
+											"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(method.Input)),
 										},
 									},
 								},
@@ -107,7 +108,7 @@ func GenerateFile(gen *protogen.Plugin) {
 						"content": map[string]interface{}{
 							"application/json": map[string]interface{}{
 								"schema": map[string]interface{}{
-									"$ref": fmt.Sprintf("#/components/schemas/%s", method.Input.GoIdent.GoName),
+									"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(method.Input)),
 								},
 							},
 						},
@@ -143,8 +144,7 @@ func GenerateFile(gen *protogen.Plugin) {
 
 // addMessageSchema adds proto message types to OpenAPI components
 func addMessageSchema(openAPI map[string]interface{}, message *protogen.Message) {
-	// Get message name
-	schemaName := message.GoIdent.GoName
+	schemaName := helper.GetSchemaName(message)
 	if components, ok := openAPI["components"].(map[string]interface{}); ok {
 		if schemas, ok := components["schemas"].(map[string]interface{}); ok {
 			// Construct schema
