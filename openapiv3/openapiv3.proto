@@ -6,6 +6,18 @@ import "google/protobuf/descriptor.proto";
 
 option go_package = "github.com/protoc-gen/protoc-gen-openapiv3/openapiv3;openapiv3";
 
+message Method {
+  bool skip_token = 1;
+}
+
+message Service {
+  string name = 1;
+}
+
 extend google.protobuf.MethodOptions {
-  bool skip_token = 50000;
+  Method method = 50000;
+}
+
+extend google.protobuf.ServiceOptions {
+  Service service = 50000;
 }

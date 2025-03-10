@@ -82,7 +82,7 @@ func GenerateFile(gen *protogen.Plugin) {
 					}
 					// Generate OpenAPI path for each method under the service
 					operation := map[string]interface{}{
-						"tags":        []string{service.GoName},
+						"tags":        []string{GetServiceName(service)},
 						"operationId": fmt.Sprintf("%s_%s", service.GoName, method.GoName),
 						"responses": map[string]interface{}{
 							"200": map[string]interface{}{
@@ -98,9 +98,9 @@ func GenerateFile(gen *protogen.Plugin) {
 						},
 					}
 
-					// Check if openapiv3.skip_token is true
-					skipToken := proto.GetExtension(method.Desc.Options(), E_SkipToken).(bool)
-					if skipToken {
+					// Check if skip_token is true
+					methodOpts := proto.GetExtension(method.Desc.Options(), E_Method).(*Method)
+					if methodOpts != nil && methodOpts.SkipToken {
 						operation["security"] = []map[string]interface{}{}
 					}
 

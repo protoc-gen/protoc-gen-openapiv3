@@ -346,7 +346,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/refresh-token:
         get:
             operationId: AuthService_RefreshTokenX
@@ -364,7 +364,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
         post:
             operationId: AuthService_RefreshToken
             requestBody:
@@ -381,7 +381,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/request-password-reset:
         post:
             operationId: AuthService_RequestPasswordReset
@@ -399,7 +399,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/reset-password:
         post:
             operationId: AuthService_ResetPassword
@@ -417,7 +417,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/send-sms-code:
         post:
             operationId: AuthService_SendSmsCode
@@ -435,7 +435,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/sign-in/oauth:
         post:
             operationId: AuthService_SignInWithOAuth
@@ -453,7 +453,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/sign-in/password:
         post:
             operationId: AuthService_SignIn
@@ -471,7 +471,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/sign-up:
         post:
             operationId: AuthService_SignUp
@@ -489,7 +489,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/verify-password-reset-token:
         get:
             operationId: AuthService_VerifyPasswordResetToken
@@ -507,7 +507,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/auth/verify-sms-code:
         post:
             operationId: AuthService_VerifySmsCode
@@ -525,7 +525,7 @@ paths:
                     description: OK
             security: []
             tags:
-                - AuthService
+                - Auth Service
     /api/v1/trips:
         get:
             operationId: TripService_ListTrips
