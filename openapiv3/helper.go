@@ -4,7 +4,6 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"strconv"
-	"strings"
 )
 
 func GetServiceName(svc *protogen.Service) string {
@@ -63,8 +62,4 @@ func getExample[T openAPITypes](field *protogen.Field, defValue T) T {
 	default:
 		return defValue
 	}
-}
-
-func isUUIDByName(name string) bool {
-	return name == "id" || strings.HasSuffix(name, "Id")
 }

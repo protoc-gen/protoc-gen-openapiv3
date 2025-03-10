@@ -179,7 +179,8 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 				case protoreflect.EnumKind:
 					property["type"] = "string"
 					property["format"] = "enum"
-					example[field.Desc.JSONName()] = ""
+					property["enum"] = helper.GetEnumValues(field.Enum)
+					example[field.Desc.JSONName()] = getExample(field, property["enum"].([]string)[0])
 				case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Uint32Kind,
 					protoreflect.Sfixed32Kind, protoreflect.Fixed32Kind:
 					property["type"] = "integer"

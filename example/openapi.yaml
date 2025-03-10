@@ -113,11 +113,15 @@ components:
         auth.v1.SignInWithOAuthRequest:
             example:
                 code: ""
-                provider: ""
+                provider: GOOGLE
             properties:
                 code:
                     type: string
                 provider:
+                    enum:
+                        - GOOGLE
+                        - GITHUB
+                        - WECHAT
                     format: enum
                     type: string
             type: object
