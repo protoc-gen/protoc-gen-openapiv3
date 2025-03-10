@@ -6,6 +6,7 @@ import (
 	"google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path"
@@ -85,11 +86,11 @@ func GenerateFile(gen *protogen.Plugin) {
 						"operationId": fmt.Sprintf("%s_%s", service.GoName, method.GoName),
 						"responses": map[string]interface{}{
 							"200": map[string]interface{}{
-								"description": "Successful Response",
+								"description": "OK",
 								"content": map[string]interface{}{
 									"application/json": map[string]interface{}{
 										"schema": map[string]interface{}{
-											"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(method.Input)),
+											"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(method.Output)),
 										},
 									},
 								},
@@ -155,10 +156,69 @@ func addMessageSchema(openAPI map[string]interface{}, message *protogen.Message)
 			// Traverse fields and generate properties
 			for _, field := range message.Fields {
 				property := make(map[string]interface{})
-				property["type"] = "string" // Assume string, can be adjusted based on actual type
+				switch field.Desc.Kind() {
+				case protoreflect.BoolKind:
+					property["type"] = "boolean"
+				case protoreflect.EnumKind:
+					property["type"] = "string"
+					property["format"] = "enum"
+				case protoreflect.Int32Kind:
+					property["type"] = "integer"
+					property["format"] = "int32"
+				case protoreflect.Sint32Kind:
+					property["type"] = "integer"
+					property["format"] = "int32"
+				case protoreflect.Uint32Kind:
+					property["type"] = "integer"
+					property["format"] = "int32"
+				case protoreflect.Int64Kind:
+					property["type"] = "integer"
+					property["format"] = "int64"
+				case protoreflect.Sint64Kind:
+					property["type"] = "integer"
+					property["format"] = "int64"
+				case protoreflect.Uint64Kind:
+					property["type"] = "integer"
+					property["format"] = "int64"
+				case protoreflect.Sfixed32Kind:
+					property["type"] = "integer"
+					property["format"] = "int32"
+				case protoreflect.Fixed32Kind:
+					property["type"] = "integer"
+					property["format"] = "int32"
+				case protoreflect.FloatKind:
+					property["type"] = "number"
+					property["format"] = "float"
+				case protoreflect.Sfixed64Kind:
+					property["type"] = "integer"
+					property["format"] = "int64"
+				case protoreflect.Fixed64Kind:
+					property["type"] = "integer"
+					property["format"] = "int64"
+				case protoreflect.DoubleKind:
+					property["type"] = "number"
+					property["format"] = "double"
+				case protoreflect.StringKind:
+					property["type"] = "string"
+				case protoreflect.BytesKind:
+					property["type"] = "string"
+					property["format"] = "byte" // Or use "binary" if needed for base64 encoding
+				case protoreflect.MessageKind, protoreflect.GroupKind:
+					if helper.GetSchemaName(field.Message) == "google.protobuf.Timestamp" {
+						// This is google.protobuf.Timestamp, treat it as a date-time string
+						property["type"] = "integer"
+						property["format"] = "int32"
+					} else {
+						// Otherwise, treat it as a regular message and add a reference to the schema
+						addMessageSchema(openAPI, field.Message)
+						property["$ref"] = fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(field.Message))
+					}
+				default:
+					property["type"] = "string"
+				}
 
 				// Add property to schema
-				properties[field.GoName] = property
+				properties[field.Desc.JSONName()] = property
 			}
 
 			// Add generated properties to schema

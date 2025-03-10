@@ -1,256 +1,322 @@
 components:
     schemas:
-        auth.v1.GetSmsAuthTokensRequest:
-            properties: {}
-            type: object
-        auth.v1.GetSmsAuthTokensResponse:
+        auth.v1.OneClickLoginRequest:
             properties:
-                BizToken:
+                token:
                     type: string
-                ExpireTime:
-                    type: string
-                StsAccessKeyId:
-                    type: string
-                StsAccessKeySecret:
-                    type: string
-                StsToken:
+            type: object
+        auth.v1.OneClickLoginResponse:
+            properties:
+                expiresIn:
+                    format: double
+                    type: number
+                token:
                     type: string
             type: object
         auth.v1.RefreshTokenRequest:
             properties:
-                RefreshToken:
+                refreshToken:
                     type: string
             type: object
         auth.v1.RefreshTokenResponse:
             properties:
-                ExpiresIn:
-                    type: string
-                Token:
+                expiresIn:
+                    format: double
+                    type: number
+                token:
                     type: string
             type: object
         auth.v1.RequestPasswordResetRequest:
             properties:
-                Email:
+                email:
                     type: string
             type: object
         auth.v1.RequestPasswordResetResponse:
             properties:
-                Status:
+                status:
                     type: string
             type: object
         auth.v1.ResetPasswordRequest:
             properties:
-                NewPassword:
+                newPassword:
                     type: string
-                Token:
+                token:
                     type: string
             type: object
         auth.v1.ResetPasswordResponse:
             properties:
-                Status:
+                status:
                     type: string
+            type: object
+        auth.v1.SendSmsCodeRequest:
+            properties:
+                phoneNumber:
+                    type: string
+            type: object
+        auth.v1.SendSmsCodeResponse:
+            properties:
+                expireTime:
+                    format: int64
+                    type: integer
+                interval:
+                    format: int64
+                    type: integer
             type: object
         auth.v1.SignInRequest:
             properties:
-                Email:
+                email:
                     type: string
-                Password:
+                password:
                     type: string
             type: object
         auth.v1.SignInResponse:
             properties:
-                ExpiresIn:
+                expiresIn:
+                    format: double
+                    type: number
+                refreshToken:
                     type: string
-                RefreshToken:
-                    type: string
-                Token:
+                token:
                     type: string
             type: object
         auth.v1.SignInWithOAuthRequest:
             properties:
-                Code:
+                code:
                     type: string
-                Provider:
+                provider:
+                    format: enum
                     type: string
             type: object
         auth.v1.SignInWithOAuthResponse:
             properties:
-                Token:
+                token:
                     type: string
             type: object
         auth.v1.SignUpRequest:
             properties:
-                Email:
+                email:
                     type: string
-                Password:
+                password:
                     type: string
             type: object
         auth.v1.SignUpResponse:
             properties:
-                ExpiresIn:
+                expiresIn:
+                    format: double
+                    type: number
+                refreshToken:
                     type: string
-                RefreshToken:
-                    type: string
-                Token:
+                token:
                     type: string
             type: object
         auth.v1.VerifyPasswordResetTokenRequest:
             properties:
-                Token:
+                token:
                     type: string
             type: object
         auth.v1.VerifyPasswordResetTokenResponse:
             properties:
-                Valid:
-                    type: string
+                valid:
+                    type: boolean
             type: object
         auth.v1.VerifySmsCodeRequest:
             properties:
-                PhoneNumber:
+                phoneNumber:
                     type: string
-                SmsCode:
-                    type: string
-                SmsToken:
+                verifyCode:
                     type: string
             type: object
         auth.v1.VerifySmsCodeResponse:
             properties:
-                ExpiresIn:
-                    type: string
-                Token:
+                expiresIn:
+                    format: double
+                    type: number
+                token:
                     type: string
             type: object
         trip.v1.CreateDailyTripRequest:
             properties:
-                Date:
+                date:
+                    format: int32
+                    type: integer
+                day:
+                    format: int32
+                    type: integer
+                notes:
                     type: string
-                Day:
-                    type: string
-                Notes:
-                    type: string
-                TripId:
+                tripId:
                     type: string
             type: object
         trip.v1.CreateDailyTripResponse:
             properties:
-                DailyTrip:
-                    type: string
+                dailyTrip:
+                    $ref: '#/components/schemas/trip.v1.DailyTrip'
             type: object
         trip.v1.CreateTripRequest:
             properties:
-                Description:
+                description:
                     type: string
-                EndTs:
-                    type: string
-                StartTs:
-                    type: string
-                Title:
+                endTs:
+                    format: int32
+                    type: integer
+                startTs:
+                    format: int32
+                    type: integer
+                title:
                     type: string
             type: object
         trip.v1.CreateTripResponse:
             properties:
-                Trip:
+                trip:
+                    $ref: '#/components/schemas/trip.v1.Trip'
+            type: object
+        trip.v1.DailyTrip:
+            properties:
+                createdAt:
+                    format: int32
+                    type: integer
+                date:
+                    format: int32
+                    type: integer
+                day:
+                    format: int32
+                    type: integer
+                id:
                     type: string
+                notes:
+                    type: string
+                tripId:
+                    type: string
+                updatedAt:
+                    format: int32
+                    type: integer
             type: object
         trip.v1.DeleteDailyTripRequest:
             properties:
-                DailyId:
+                dailyId:
                     type: string
-                TripId:
+                tripId:
                     type: string
             type: object
         trip.v1.DeleteDailyTripResponse:
             properties:
-                Status:
+                status:
                     type: string
             type: object
         trip.v1.DeleteTripRequest:
             properties:
-                Id:
+                id:
                     type: string
             type: object
         trip.v1.DeleteTripResponse:
             properties:
-                Status:
+                status:
                     type: string
             type: object
         trip.v1.GetDailyTripRequest:
             properties:
-                DailyId:
+                dailyId:
                     type: string
-                TripId:
+                tripId:
                     type: string
             type: object
         trip.v1.GetDailyTripResponse:
             properties:
-                DailyTrip:
-                    type: string
+                dailyTrip:
+                    $ref: '#/components/schemas/trip.v1.DailyTrip'
             type: object
         trip.v1.GetTripRequest:
             properties:
-                Id:
+                id:
                     type: string
             type: object
         trip.v1.GetTripResponse:
             properties:
-                Trip:
-                    type: string
+                trip:
+                    $ref: '#/components/schemas/trip.v1.Trip'
             type: object
         trip.v1.ListDailyTripsRequest:
             properties:
-                TripId:
+                tripId:
                     type: string
             type: object
         trip.v1.ListDailyTripsResponse:
             properties:
-                DailyTrips:
-                    type: string
+                dailyTrips:
+                    $ref: '#/components/schemas/trip.v1.DailyTrip'
             type: object
         trip.v1.ListTripsRequest:
             properties: {}
             type: object
         trip.v1.ListTripsResponse:
             properties:
-                Trips:
+                trips:
+                    $ref: '#/components/schemas/trip.v1.Trip'
+            type: object
+        trip.v1.Trip:
+            properties:
+                createdAt:
+                    format: int32
+                    type: integer
+                description:
                     type: string
+                endTs:
+                    format: int32
+                    type: integer
+                id:
+                    type: string
+                startTs:
+                    format: int32
+                    type: integer
+                status:
+                    type: boolean
+                title:
+                    type: string
+                updatedAt:
+                    format: int32
+                    type: integer
             type: object
         trip.v1.UpdateDailyTripRequest:
             properties:
-                DailyId:
+                dailyId:
                     type: string
-                Date:
+                date:
+                    format: int32
+                    type: integer
+                day:
+                    format: int32
+                    type: integer
+                notes:
                     type: string
-                Day:
-                    type: string
-                Notes:
-                    type: string
-                TripId:
+                tripId:
                     type: string
             type: object
         trip.v1.UpdateDailyTripResponse:
             properties:
-                DailyTrip:
-                    type: string
+                dailyTrip:
+                    $ref: '#/components/schemas/trip.v1.DailyTrip'
             type: object
         trip.v1.UpdateTripRequest:
             properties:
-                Description:
+                description:
                     type: string
-                EndTs:
+                endTs:
+                    format: int32
+                    type: integer
+                id:
                     type: string
-                Id:
-                    type: string
-                StartTs:
-                    type: string
-                Status:
-                    type: string
-                Title:
+                startTs:
+                    format: int32
+                    type: integer
+                status:
+                    type: boolean
+                title:
                     type: string
             type: object
         trip.v1.UpdateTripResponse:
             properties:
-                Trip:
-                    type: string
+                trip:
+                    $ref: '#/components/schemas/trip.v1.Trip'
             type: object
     securitySchemes:
         BearerAuth:
@@ -263,7 +329,42 @@ info:
     version: 1.0.0
 openapi: 3.0.0
 paths:
+    /api/v1/auth/one-click-login:
+        post:
+            operationId: AuthService_OneClickLogin
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth.v1.OneClickLoginRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.OneClickLoginResponse'
+                    description: OK
+            security: []
+            tags:
+                - AuthService
     /api/v1/auth/refresh-token:
+        get:
+            operationId: AuthService_RefreshTokenX
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth.v1.RefreshTokenRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.RefreshTokenResponse'
+                    description: OK
+            security: []
+            tags:
+                - AuthService
         post:
             operationId: AuthService_RefreshToken
             requestBody:
@@ -276,8 +377,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/auth.v1.RefreshTokenRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/auth.v1.RefreshTokenResponse'
+                    description: OK
             security: []
             tags:
                 - AuthService
@@ -294,8 +395,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/auth.v1.RequestPasswordResetRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/auth.v1.RequestPasswordResetResponse'
+                    description: OK
             security: []
             tags:
                 - AuthService
@@ -312,8 +413,26 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/auth.v1.ResetPasswordRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/auth.v1.ResetPasswordResponse'
+                    description: OK
+            security: []
+            tags:
+                - AuthService
+    /api/v1/auth/send-sms-code:
+        post:
+            operationId: AuthService_SendSmsCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth.v1.SendSmsCodeRequest'
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.SendSmsCodeResponse'
+                    description: OK
             security: []
             tags:
                 - AuthService
@@ -330,8 +449,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/auth.v1.SignInWithOAuthRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/auth.v1.SignInWithOAuthResponse'
+                    description: OK
             security: []
             tags:
                 - AuthService
@@ -348,8 +467,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/auth.v1.SignInRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/auth.v1.SignInResponse'
+                    description: OK
             security: []
             tags:
                 - AuthService
@@ -366,26 +485,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/auth.v1.SignUpRequest'
-                    description: Successful Response
-            security: []
-            tags:
-                - AuthService
-    /api/v1/auth/sms-auth-tokens:
-        post:
-            operationId: AuthService_GetSmsAuthTokens
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/auth.v1.GetSmsAuthTokensRequest'
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/auth.v1.GetSmsAuthTokensRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/auth.v1.SignUpResponse'
+                    description: OK
             security: []
             tags:
                 - AuthService
@@ -402,8 +503,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/auth.v1.VerifyPasswordResetTokenRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/auth.v1.VerifyPasswordResetTokenResponse'
+                    description: OK
             security: []
             tags:
                 - AuthService
@@ -420,8 +521,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/auth.v1.VerifySmsCodeRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/auth.v1.VerifySmsCodeResponse'
+                    description: OK
             security: []
             tags:
                 - AuthService
@@ -438,8 +539,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.ListTripsRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.ListTripsResponse'
+                    description: OK
             tags:
                 - TripService
         post:
@@ -454,8 +555,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.CreateTripRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.CreateTripResponse'
+                    description: OK
             tags:
                 - TripService
     /api/v1/trips/{id}:
@@ -471,8 +572,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.DeleteTripRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.DeleteTripResponse'
+                    description: OK
             tags:
                 - TripService
         get:
@@ -487,8 +588,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.GetTripRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.GetTripResponse'
+                    description: OK
             tags:
                 - TripService
         put:
@@ -503,8 +604,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.UpdateTripRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.UpdateTripResponse'
+                    description: OK
             tags:
                 - TripService
     /api/v1/trips/{trip_id}/daily:
@@ -520,8 +621,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.ListDailyTripsRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.ListDailyTripsResponse'
+                    description: OK
             tags:
                 - TripService
         post:
@@ -536,8 +637,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.CreateDailyTripRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.CreateDailyTripResponse'
+                    description: OK
             tags:
                 - TripService
     /api/v1/trips/{trip_id}/daily/{daily_id}:
@@ -553,8 +654,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.DeleteDailyTripRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.DeleteDailyTripResponse'
+                    description: OK
             tags:
                 - TripService
         get:
@@ -569,8 +670,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.GetDailyTripRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.GetDailyTripResponse'
+                    description: OK
             tags:
                 - TripService
         put:
@@ -585,8 +686,8 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/trip.v1.UpdateDailyTripRequest'
-                    description: Successful Response
+                                $ref: '#/components/schemas/trip.v1.UpdateDailyTripResponse'
+                    description: OK
             tags:
                 - TripService
 security:
