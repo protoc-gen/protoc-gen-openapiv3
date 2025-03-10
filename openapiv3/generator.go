@@ -52,7 +52,7 @@ func GenerateFile(gen *protogen.Plugin) {
 		},
 	}
 
-	allTags := map[string]struct{}{}
+	allTags := map[string]string{}
 
 	// Traverse all proto files
 	for _, file := range gen.Files {
@@ -60,7 +60,7 @@ func GenerateFile(gen *protogen.Plugin) {
 			// Traverse each service in the file
 			for _, service := range file.Services {
 				svcName := GetServiceName(service)
-				allTags[svcName] = struct{}{}
+				allTags[svcName] = GetServiceDescription(service)
 				for _, method := range service.Methods {
 					httpRule := proto.GetExtension(method.Desc.Options(), annotations.E_Http).(*annotations.HttpRule)
 					var methodPath string
@@ -134,12 +134,13 @@ func GenerateFile(gen *protogen.Plugin) {
 	}
 
 	tags := make([]map[string]any, 0, len(allTags))
-	openAPI["tags"] = tags
-	for tag := range allTags {
+	for tag, desc := range allTags {
 		tags = append(tags, map[string]any{
-			"name": tag,
+			"name":        tag,
+			"description": desc,
 		})
 	}
+	openAPI["tags"] = tags
 
 	// Generate OpenAPI YAML file
 	openAPIDocument, err := yaml.Marshal(openAPI)

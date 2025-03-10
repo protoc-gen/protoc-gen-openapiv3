@@ -12,6 +12,7 @@ message Method {
 
 message Service {
   string name = 1;
+  string description = 2;
 }
 
 extend google.protobuf.MethodOptions {

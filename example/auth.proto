@@ -10,6 +10,7 @@ option go_package = "github.com/protoc-gen/protoc-gen-openapiv3/example/api/auth
 service AuthService {
 	option (openapiv3.service) = {
 		name: "Auth Service"
+		description: "Authentication service"
 	};
 	rpc SignIn (SignInRequest) returns (SignInResponse) {
 		option (google.api.http) = {

@@ -13,3 +13,12 @@ func GetServiceName(svc *protogen.Service) string {
 
 	return svc.GoName
 }
+
+func GetServiceDescription(svc *protogen.Service) string {
+	svcOpts := proto.GetExtension(svc.Desc.Options(), E_Service).(*Service)
+	if svcOpts != nil {
+		return svcOpts.GetDescription()
+	}
+
+	return ""
+}

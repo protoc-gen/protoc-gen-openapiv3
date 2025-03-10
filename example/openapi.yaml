@@ -697,4 +697,8 @@ servers:
       url: https://localhost:8000
     - description: Prod Server
       url: https://localhost:9000
-tags: []
+tags:
+    - description: Authentication service
+      name: Auth Service
+    - description: ""
+      name: TripService
