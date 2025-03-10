@@ -4,6 +4,7 @@ package trip.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "openapiv3/openapiv3.proto";
 
 option go_package = "github.com/protoc-gen/protoc-gen-openapiv3/example/api/trip/v1;v1";
 
@@ -66,11 +67,11 @@ service TripService {
 }
 
 message Trip {
-  string id = 1;
-  google.protobuf.Timestamp created_at = 2;
+  string id = 1 [(openapiv3.example) = {value: "680b81df-e966-4b51-a63f-1dfa749c04a5"}];
+  google.protobuf.Timestamp created_at = 2 [(openapiv3.example) = {value: "1741595194"}];
   google.protobuf.Timestamp updated_at = 3;
-  bool status = 4;
-  string title = 5;
+  bool status = 4 [(openapiv3.example) = {value: "true"}];
+  string title = 5 [(openapiv3.example) = {value: "My Trip"}];
   string description = 6;
   google.protobuf.Timestamp start_ts = 7;
   google.protobuf.Timestamp end_ts = 8;
@@ -146,7 +147,7 @@ message GetDailyTripResponse {
 message UpdateDailyTripRequest {
   string trip_id = 1;
   string daily_id = 2;
-  int32 day = 3;
+  int32 day = 3 [(openapiv3.example) = {value: "7"}];
   google.protobuf.Timestamp date = 4;
   string notes = 5;
 }

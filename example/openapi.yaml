@@ -1,11 +1,16 @@
 components:
     schemas:
         auth.v1.OneClickLoginRequest:
+            example:
+                token: ""
             properties:
                 token:
                     type: string
             type: object
         auth.v1.OneClickLoginResponse:
+            example:
+                expiresIn: 0
+                token: ""
             properties:
                 expiresIn:
                     format: double
@@ -14,11 +19,16 @@ components:
                     type: string
             type: object
         auth.v1.RefreshTokenRequest:
+            example:
+                refreshToken: ""
             properties:
                 refreshToken:
                     type: string
             type: object
         auth.v1.RefreshTokenResponse:
+            example:
+                expiresIn: 0
+                token: ""
             properties:
                 expiresIn:
                     format: double
@@ -27,16 +37,23 @@ components:
                     type: string
             type: object
         auth.v1.RequestPasswordResetRequest:
+            example:
+                email: ""
             properties:
                 email:
                     type: string
             type: object
         auth.v1.RequestPasswordResetResponse:
+            example:
+                status: ""
             properties:
                 status:
                     type: string
             type: object
         auth.v1.ResetPasswordRequest:
+            example:
+                newPassword: ""
+                token: ""
             properties:
                 newPassword:
                     type: string
@@ -44,16 +61,23 @@ components:
                     type: string
             type: object
         auth.v1.ResetPasswordResponse:
+            example:
+                status: ""
             properties:
                 status:
                     type: string
             type: object
         auth.v1.SendSmsCodeRequest:
+            example:
+                phoneNumber: ""
             properties:
                 phoneNumber:
                     type: string
             type: object
         auth.v1.SendSmsCodeResponse:
+            example:
+                expireTime: 0
+                interval: 0
             properties:
                 expireTime:
                     format: int64
@@ -63,6 +87,9 @@ components:
                     type: integer
             type: object
         auth.v1.SignInRequest:
+            example:
+                email: ""
+                password: ""
             properties:
                 email:
                     type: string
@@ -70,6 +97,10 @@ components:
                     type: string
             type: object
         auth.v1.SignInResponse:
+            example:
+                expiresIn: 0
+                refreshToken: ""
+                token: ""
             properties:
                 expiresIn:
                     format: double
@@ -80,6 +111,9 @@ components:
                     type: string
             type: object
         auth.v1.SignInWithOAuthRequest:
+            example:
+                code: ""
+                provider: ""
             properties:
                 code:
                     type: string
@@ -88,11 +122,16 @@ components:
                     type: string
             type: object
         auth.v1.SignInWithOAuthResponse:
+            example:
+                token: ""
             properties:
                 token:
                     type: string
             type: object
         auth.v1.SignUpRequest:
+            example:
+                email: ""
+                password: ""
             properties:
                 email:
                     type: string
@@ -100,6 +139,10 @@ components:
                     type: string
             type: object
         auth.v1.SignUpResponse:
+            example:
+                expiresIn: 0
+                refreshToken: ""
+                token: ""
             properties:
                 expiresIn:
                     format: double
@@ -110,16 +153,23 @@ components:
                     type: string
             type: object
         auth.v1.VerifyPasswordResetTokenRequest:
+            example:
+                token: ""
             properties:
                 token:
                     type: string
             type: object
         auth.v1.VerifyPasswordResetTokenResponse:
+            example:
+                valid: true
             properties:
                 valid:
                     type: boolean
             type: object
         auth.v1.VerifySmsCodeRequest:
+            example:
+                phoneNumber: ""
+                verifyCode: ""
             properties:
                 phoneNumber:
                     type: string
@@ -127,6 +177,9 @@ components:
                     type: string
             type: object
         auth.v1.VerifySmsCodeResponse:
+            example:
+                expiresIn: 0
+                token: ""
             properties:
                 expiresIn:
                     format: double
@@ -135,6 +188,11 @@ components:
                     type: string
             type: object
         trip.v1.CreateDailyTripRequest:
+            example:
+                date: 1741589979
+                day: 0
+                notes: ""
+                tripId: ""
             properties:
                 date:
                     format: int32
@@ -153,6 +211,11 @@ components:
                     $ref: '#/components/schemas/trip.v1.DailyTrip'
             type: object
         trip.v1.CreateTripRequest:
+            example:
+                description: ""
+                endTs: 1741589979
+                startTs: 1741589979
+                title: ""
             properties:
                 description:
                     type: string
@@ -171,6 +234,14 @@ components:
                     $ref: '#/components/schemas/trip.v1.Trip'
             type: object
         trip.v1.DailyTrip:
+            example:
+                createdAt: 1741589979
+                date: 1741589979
+                day: 0
+                id: ""
+                notes: ""
+                tripId: ""
+                updatedAt: 1741589979
             properties:
                 createdAt:
                     format: int32
@@ -192,6 +263,9 @@ components:
                     type: integer
             type: object
         trip.v1.DeleteDailyTripRequest:
+            example:
+                dailyId: ""
+                tripId: ""
             properties:
                 dailyId:
                     type: string
@@ -199,21 +273,30 @@ components:
                     type: string
             type: object
         trip.v1.DeleteDailyTripResponse:
+            example:
+                status: ""
             properties:
                 status:
                     type: string
             type: object
         trip.v1.DeleteTripRequest:
+            example:
+                id: ""
             properties:
                 id:
                     type: string
             type: object
         trip.v1.DeleteTripResponse:
+            example:
+                status: ""
             properties:
                 status:
                     type: string
             type: object
         trip.v1.GetDailyTripRequest:
+            example:
+                dailyId: ""
+                tripId: ""
             properties:
                 dailyId:
                     type: string
@@ -226,6 +309,8 @@ components:
                     $ref: '#/components/schemas/trip.v1.DailyTrip'
             type: object
         trip.v1.GetTripRequest:
+            example:
+                id: ""
             properties:
                 id:
                     type: string
@@ -236,6 +321,8 @@ components:
                     $ref: '#/components/schemas/trip.v1.Trip'
             type: object
         trip.v1.ListDailyTripsRequest:
+            example:
+                tripId: ""
             properties:
                 tripId:
                     type: string
@@ -254,6 +341,15 @@ components:
                     $ref: '#/components/schemas/trip.v1.Trip'
             type: object
         trip.v1.Trip:
+            example:
+                createdAt: 1741595194
+                description: ""
+                endTs: 1741589979
+                id: 680b81df-e966-4b51-a63f-1dfa749c04a5
+                startTs: 1741589979
+                status: true
+                title: My Trip
+                updatedAt: 1741589979
             properties:
                 createdAt:
                     format: int32
@@ -277,6 +373,12 @@ components:
                     type: integer
             type: object
         trip.v1.UpdateDailyTripRequest:
+            example:
+                dailyId: ""
+                date: 1741589979
+                day: 7
+                notes: ""
+                tripId: ""
             properties:
                 dailyId:
                     type: string
@@ -297,6 +399,13 @@ components:
                     $ref: '#/components/schemas/trip.v1.DailyTrip'
             type: object
         trip.v1.UpdateTripRequest:
+            example:
+                description: ""
+                endTs: 1741589979
+                id: ""
+                startTs: 1741589979
+                status: true
+                title: ""
             properties:
                 description:
                     type: string

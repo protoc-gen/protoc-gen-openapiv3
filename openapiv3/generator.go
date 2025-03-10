@@ -167,6 +167,7 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 			schema := make(map[string]any)
 			schema["type"] = "object"
 			properties := make(map[string]any)
+			example := make(map[string]any)
 
 			// Traverse fields and generate properties
 			for _, field := range message.Fields {
@@ -174,55 +175,42 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 				switch field.Desc.Kind() {
 				case protoreflect.BoolKind:
 					property["type"] = "boolean"
+					example[field.Desc.JSONName()] = getExample(field, true)
 				case protoreflect.EnumKind:
 					property["type"] = "string"
 					property["format"] = "enum"
-				case protoreflect.Int32Kind:
+					example[field.Desc.JSONName()] = ""
+				case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Uint32Kind,
+					protoreflect.Sfixed32Kind, protoreflect.Fixed32Kind:
 					property["type"] = "integer"
 					property["format"] = "int32"
-				case protoreflect.Sint32Kind:
-					property["type"] = "integer"
-					property["format"] = "int32"
-				case protoreflect.Uint32Kind:
-					property["type"] = "integer"
-					property["format"] = "int32"
-				case protoreflect.Int64Kind:
+					example[field.Desc.JSONName()] = getExample(field, 0)
+				case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Uint64Kind,
+					protoreflect.Sfixed64Kind, protoreflect.Fixed64Kind:
 					property["type"] = "integer"
 					property["format"] = "int64"
-				case protoreflect.Sint64Kind:
-					property["type"] = "integer"
-					property["format"] = "int64"
-				case protoreflect.Uint64Kind:
-					property["type"] = "integer"
-					property["format"] = "int64"
-				case protoreflect.Sfixed32Kind:
-					property["type"] = "integer"
-					property["format"] = "int32"
-				case protoreflect.Fixed32Kind:
-					property["type"] = "integer"
-					property["format"] = "int32"
+					example[field.Desc.JSONName()] = getExample(field, 0)
 				case protoreflect.FloatKind:
 					property["type"] = "number"
 					property["format"] = "float"
-				case protoreflect.Sfixed64Kind:
-					property["type"] = "integer"
-					property["format"] = "int64"
-				case protoreflect.Fixed64Kind:
-					property["type"] = "integer"
-					property["format"] = "int64"
+					example[field.Desc.JSONName()] = getExample(field, 0.0)
 				case protoreflect.DoubleKind:
 					property["type"] = "number"
 					property["format"] = "double"
+					example[field.Desc.JSONName()] = getExample(field, 0.0)
 				case protoreflect.StringKind:
 					property["type"] = "string"
+					example[field.Desc.JSONName()] = getExample(field, "")
 				case protoreflect.BytesKind:
 					property["type"] = "string"
 					property["format"] = "byte" // Or use "binary" if needed for base64 encoding
+					example[field.Desc.JSONName()] = getExample(field, "")
 				case protoreflect.MessageKind, protoreflect.GroupKind:
 					if helper.GetSchemaName(field.Message) == "google.protobuf.Timestamp" {
 						// This is google.protobuf.Timestamp, treat it as a date-time string
 						property["type"] = "integer"
 						property["format"] = "int32"
+						example[field.Desc.JSONName()] = getExample(field, 1741589979)
 					} else {
 						// Otherwise, treat it as a regular message and add a reference to the schema
 						addMessageSchema(openAPI, field.Message)
@@ -230,6 +218,7 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 					}
 				default:
 					property["type"] = "string"
+					example[field.Desc.JSONName()] = ""
 				}
 
 				// Add property to schema
@@ -238,6 +227,9 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 
 			// Add generated properties to schema
 			schema["properties"] = properties
+			if len(example) > 0 {
+				schema["example"] = example
+			}
 
 			// Add schema to components/schemas
 			schemas[schemaName] = schema

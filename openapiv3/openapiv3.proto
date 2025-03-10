@@ -8,11 +8,21 @@ option go_package = "github.com/protoc-gen/protoc-gen-openapiv3/openapiv3;openap
 
 message Method {
   bool skip_token = 1;
+  string summary = 2;
 }
 
 message Service {
   string name = 1;
   string description = 2;
+}
+
+message Field {
+  string summary = 1;
+  string description = 2;
+}
+
+message Example {
+  string value = 1;
 }
 
 extend google.protobuf.MethodOptions {
@@ -21,4 +31,9 @@ extend google.protobuf.MethodOptions {
 
 extend google.protobuf.ServiceOptions {
   Service service = 50000;
+}
+
+extend google.protobuf.FieldOptions {
+  Field field = 50000;
+  Example example = 50001;
 }
