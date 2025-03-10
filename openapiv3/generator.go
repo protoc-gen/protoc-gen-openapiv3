@@ -3,7 +3,6 @@ package openapiv3
 import (
 	"fmt"
 	"github.com/protoc-gen/protoc-gen-openapiv3/pkg/helper"
-	"google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -62,44 +61,12 @@ func GenerateFile(gen *protogen.Plugin) {
 				svcName := GetServiceName(service)
 				allTags[svcName] = GetServiceDescription(service)
 				for _, method := range service.Methods {
-					httpRule := proto.GetExtension(method.Desc.Options(), annotations.E_Http).(*annotations.HttpRule)
-					var methodPath string
-					var httpMethod string
-					if httpRule != nil {
-						switch pattern := httpRule.Pattern.(type) {
-						case *annotations.HttpRule_Post:
-							methodPath = pattern.Post
-							httpMethod = "post"
-						case *annotations.HttpRule_Get:
-							methodPath = pattern.Get
-							httpMethod = "get"
-						case *annotations.HttpRule_Put:
-							methodPath = pattern.Put
-							httpMethod = "put"
-						case *annotations.HttpRule_Delete:
-							methodPath = pattern.Delete
-							httpMethod = "delete"
-						case *annotations.HttpRule_Patch:
-							methodPath = pattern.Patch
-							httpMethod = "patch"
-						}
-					}
 					// Generate OpenAPI path for each method under the service
 					operation := map[string]any{
 						"tags":        []string{svcName},
 						"operationId": fmt.Sprintf("%s_%s", service.GoName, method.GoName),
-						"responses": map[string]any{
-							"200": map[string]any{
-								"description": "OK",
-								"content": map[string]any{
-									"application/json": map[string]any{
-										"schema": map[string]any{
-											"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(method.Output)),
-										},
-									},
-								},
-							},
-						},
+						"requestBody": getRequestBody(method.Input),
+						"responses":   getResponseBody(method.Output),
 					}
 
 					// Check if skip_token is true
@@ -108,18 +75,8 @@ func GenerateFile(gen *protogen.Plugin) {
 						operation["security"] = []map[string]any{}
 					}
 
-					// Generate OpenAPI request body for each method
-					operation["requestBody"] = map[string]any{
-						"content": map[string]any{
-							"application/json": map[string]any{
-								"schema": map[string]any{
-									"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(method.Input)),
-								},
-							},
-						},
-					}
-
 					// Add operation to paths
+					methodPath, httpMethod := helper.GetHttpMethodAndPath(method)
 					if _, ok := paths[methodPath]; !ok {
 						paths[methodPath] = make(map[string]any)
 					}
@@ -179,6 +136,8 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 				case protoreflect.EnumKind:
 					property["type"] = "string"
 					property["format"] = "enum"
+					// Enum specification:
+					// https://swagger.io/docs/specification/v3_0/data-models/enums/
 					property["enum"] = helper.GetEnumValues(field.Enum)
 					example[field.Desc.JSONName()] = getExample(field, property["enum"].([]string)[0])
 				case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Uint32Kind,
@@ -275,4 +234,31 @@ func parseServersOption(gen *protogen.Plugin) []map[string]any {
 		}
 	}
 	return servers
+}
+
+func getRequestBody(message *protogen.Message) map[string]any {
+	return map[string]any{
+		"content": map[string]any{
+			"application/json": map[string]any{
+				"schema": map[string]any{
+					"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(message)),
+				},
+			},
+		},
+	}
+}
+
+func getResponseBody(message *protogen.Message) map[string]any {
+	return map[string]any{
+		"200": map[string]any{
+			"description": "OK",
+			"content": map[string]any{
+				"application/json": map[string]any{
+					"schema": map[string]any{
+						"$ref": fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(message)),
+					},
+				},
+			},
+		},
+	}
 }
