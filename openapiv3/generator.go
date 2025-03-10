@@ -133,6 +133,8 @@ func GenerateFile(gen *protogen.Plugin) {
 		}
 	}
 
+	// Tags specification:
+	// https://swagger.io/docs/specification/v3_0/grouping-operations-with-tags/
 	tags := make([]map[string]any, 0, len(allTags))
 	for tag, desc := range allTags {
 		tags = append(tags, map[string]any{
