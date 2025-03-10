@@ -14,26 +14,7 @@ import (
 
 // GenerateFile traverses all proto files and generates the OpenAPI specification file
 func GenerateFile(gen *protogen.Plugin) {
-	// Basic structure of the OpenAPI specification
-	openAPI := make(map[string]any)
-	openAPI["openapi"] = "3.0.0"
-	openAPI["info"] = map[string]any{
-		"title":       "Generated API",
-		"description": "API generated from protobufs",
-		"version":     "1.0.0",
-	}
-
-	servers := parseServersOption(gen)
-	if len(servers) > 0 {
-		openAPI["servers"] = servers
-	}
-
-	// Middle part for paths
 	paths := make(map[string]map[string]any)
-	openAPI["paths"] = paths
-
-	// Components part, will be added at the end
-	components := make(map[string]any)
 	commonResp := map[string]any{
 		"type": "object",
 		"properties": map[string]any{
@@ -79,26 +60,40 @@ func GenerateFile(gen *protogen.Plugin) {
 			},
 		},
 	}
-	// {"code":3, "message":"Request is invalid", "details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo", "reason":"BAD_REQUEST", "domain":"", "metadata":{}}]}%
-	components["schemas"] = map[string]any{
-		"BadRequest":          commonResp,
-		"Unauthorized":        commonResp,
-		"InternalServerError": commonResp,
-	}
-	components["securitySchemes"] = map[string]any{
-		"BearerAuth": map[string]any{
-			"type":         "http",
-			"scheme":       "bearer",
-			"bearerFormat": "JWT",
-		},
-	}
-	openAPI["components"] = components
 
-	// Security part
-	openAPI["security"] = []map[string]any{
-		{
-			"BearerAuth": []any{},
+	// Basic structure of the OpenAPI specification
+	openAPI := map[string]any{
+		"openapi": "3.0.0",
+		"info": map[string]any{
+			"title":       "Generated API",
+			"description": "API generated from protobufs",
+			"version":     "1.0.0",
 		},
+		"security": []map[string]any{
+			{
+				"BearerAuth": []any{},
+			},
+		},
+		"paths": paths,
+		"components": map[string]any{
+			"schemas": map[string]any{
+				"BadRequest":          commonResp,
+				"Unauthorized":        commonResp,
+				"InternalServerError": commonResp,
+			},
+			"securitySchemes": map[string]any{
+				"BearerAuth": map[string]any{
+					"type":         "http",
+					"scheme":       "bearer",
+					"bearerFormat": "JWT",
+				},
+			},
+		},
+	}
+
+	servers := parseServersOption(gen)
+	if len(servers) > 0 {
+		openAPI["servers"] = servers
 	}
 
 	allTags := map[string]string{}
