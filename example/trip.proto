@@ -34,6 +34,9 @@ service TripService {
   rpc ListTrips(ListTripsRequest) returns (ListTripsResponse) {
     option (google.api.http) = {
       get: "/api/v1/trips"
+      additional_bindings {
+        get: "/api/v1/trips?page={page}&size={size}"
+      }
     };
   }
 
@@ -118,6 +121,8 @@ message DeleteTripResponse {
 }
 
 message ListTripsRequest {
+  int32 page = 1;
+  int32 size = 2;
 }
 
 message ListTripsResponse {

@@ -109,7 +109,6 @@ func GenerateFile(gen *protogen.Plugin) {
 					operation := map[string]any{
 						"tags":        []string{svcName},
 						"operationId": fmt.Sprintf("%s_%s", service.GoName, method.GoName),
-						"requestBody": getRequestBody(method.Input),
 						"responses":   getResponseBody(method.Output),
 					}
 
@@ -119,21 +118,22 @@ func GenerateFile(gen *protogen.Plugin) {
 						operation["security"] = []map[string]any{}
 					}
 
-					// Add operation to paths
+					addMessageSchema(openAPI, method.Output)
 					methodPath, httpMethod := helper.GetHttpMethodAndPath(method)
-					parameters := extractPathParameters(methodPath, method.Input)
-					if len(parameters) > 0 {
-						operation["parameters"] = parameters
+					if httpMethod == "get" || httpMethod == "delete" {
+						parameters := extractPathParameters(methodPath, method.Input)
+						if len(parameters) > 0 {
+							operation["parameters"] = parameters
+						}
+					} else {
+						operation["requestBody"] = getRequestBody(method.Input)
+						addMessageSchema(openAPI, method.Input)
 					}
 
 					if _, ok := paths[methodPath]; !ok {
 						paths[methodPath] = make(map[string]any)
 					}
 					paths[methodPath][httpMethod] = operation
-
-					// Generate schema for Input and Output
-					addMessageSchema(openAPI, method.Input)
-					addMessageSchema(openAPI, method.Output)
 				}
 			}
 		}
@@ -319,6 +319,21 @@ func extractPathParameters(path string, message *protogen.Message) []map[string]
 			}
 			parameters = append(parameters, params)
 		}
+	}
+
+	for _, field := range message.Fields {
+		if field.Desc.IsExtension() {
+			continue
+		}
+		params := map[string]any{
+			"name":     field.Desc.JSONName(),
+			"in":       "query",
+			"required": false,
+		}
+		property, example := GetPropertyAndExample(field, nil)
+		params["schema"] = property
+		params["example"] = example
+		parameters = append(parameters, params)
 	}
 	return parameters
 }

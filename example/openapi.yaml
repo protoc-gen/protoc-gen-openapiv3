@@ -243,13 +243,6 @@ components:
                 token:
                     type: string
             type: object
-        auth.v1.VerifyPasswordResetTokenRequest:
-            example:
-                token: ""
-            properties:
-                token:
-                    type: string
-            type: object
         auth.v1.VerifyPasswordResetTokenResponse:
             example:
                 valid: true
@@ -357,28 +350,11 @@ components:
                     format: int32
                     type: integer
             type: object
-        trip.v1.DeleteDailyTripRequest:
-            example:
-                dailyId: ""
-                tripId: ""
-            properties:
-                dailyId:
-                    type: string
-                tripId:
-                    type: string
-            type: object
         trip.v1.DeleteDailyTripResponse:
             example:
                 status: ""
             properties:
                 status:
-                    type: string
-            type: object
-        trip.v1.DeleteTripRequest:
-            example:
-                id: ""
-            properties:
-                id:
                     type: string
             type: object
         trip.v1.DeleteTripResponse:
@@ -388,16 +364,6 @@ components:
                 status:
                     type: string
             type: object
-        trip.v1.GetDailyTripRequest:
-            example:
-                dailyId: ""
-                tripId: ""
-            properties:
-                dailyId:
-                    type: string
-                tripId:
-                    type: string
-            type: object
         trip.v1.GetDailyTripResponse:
             example:
                 dailyTrip: null
@@ -405,26 +371,12 @@ components:
                 dailyTrip:
                     $ref: '#/components/schemas/trip.v1.DailyTrip'
             type: object
-        trip.v1.GetTripRequest:
-            example:
-                id: ""
-            properties:
-                id:
-                    type: string
-            type: object
         trip.v1.GetTripResponse:
             example:
                 trip: null
             properties:
                 trip:
                     $ref: '#/components/schemas/trip.v1.Trip'
-            type: object
-        trip.v1.ListDailyTripsRequest:
-            example:
-                tripId: ""
-            properties:
-                tripId:
-                    type: string
             type: object
         trip.v1.ListDailyTripsResponse:
             example:
@@ -434,9 +386,6 @@ components:
                     items:
                         $ref: '#/components/schemas/trip.v1.DailyTrip'
                     type: array
-            type: object
-        trip.v1.ListTripsRequest:
-            properties: {}
             type: object
         trip.v1.ListTripsResponse:
             example:
@@ -589,12 +538,13 @@ paths:
     /api/v1/auth/refresh-token:
         get:
             operationId: AuthService_RefreshTokenX
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/auth.v1.RefreshTokenRequest'
-                required: true
+            parameters:
+                - example: ""
+                  in: query
+                  name: refreshToken
+                  required: false
+                  schema:
+                    type: string
             responses:
                 "200":
                     content:
@@ -884,12 +834,13 @@ paths:
     /api/v1/auth/verify-password-reset-token:
         get:
             operationId: AuthService_VerifyPasswordResetToken
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/auth.v1.VerifyPasswordResetTokenRequest'
-                required: true
+            parameters:
+                - example: ""
+                  in: query
+                  name: token
+                  required: false
+                  schema:
+                    type: string
             responses:
                 "200":
                     content:
@@ -958,12 +909,21 @@ paths:
     /api/v1/trips:
         get:
             operationId: TripService_ListTrips
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/trip.v1.ListTripsRequest'
-                required: true
+            parameters:
+                - example: 0
+                  in: query
+                  name: page
+                  required: false
+                  schema:
+                    format: int32
+                    type: integer
+                - example: 0
+                  in: query
+                  name: size
+                  required: false
+                  schema:
+                    format: int32
+                    type: integer
             responses:
                 "200":
                     content:
@@ -1036,12 +996,12 @@ paths:
                   required: true
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/trip.v1.DeleteTripRequest'
-                required: true
+                - example: ""
+                  in: query
+                  name: id
+                  required: false
+                  schema:
+                    type: string
             responses:
                 "200":
                     content:
@@ -1078,12 +1038,12 @@ paths:
                   required: true
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/trip.v1.GetTripRequest'
-                required: true
+                - example: ""
+                  in: query
+                  name: id
+                  required: false
+                  schema:
+                    type: string
             responses:
                 "200":
                     content:
@@ -1113,13 +1073,6 @@ paths:
                 - TripService
         put:
             operationId: TripService_UpdateTrip
-            parameters:
-                - example: 680b81df-e966-4b51-a63f-1dfa749c04a5
-                  in: path
-                  name: id
-                  required: true
-                  schema:
-                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1163,12 +1116,12 @@ paths:
                   required: true
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/trip.v1.ListDailyTripsRequest'
-                required: true
+                - example: ""
+                  in: query
+                  name: tripId
+                  required: false
+                  schema:
+                    type: string
             responses:
                 "200":
                     content:
@@ -1198,13 +1151,6 @@ paths:
                 - TripService
         post:
             operationId: TripService_CreateDailyTrip
-            parameters:
-                - example: ""
-                  in: path
-                  name: tripId
-                  required: true
-                  schema:
-                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1254,12 +1200,18 @@ paths:
                   required: true
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/trip.v1.DeleteDailyTripRequest'
-                required: true
+                - example: ""
+                  in: query
+                  name: tripId
+                  required: false
+                  schema:
+                    type: string
+                - example: ""
+                  in: query
+                  name: dailyId
+                  required: false
+                  schema:
+                    type: string
             responses:
                 "200":
                     content:
@@ -1302,12 +1254,18 @@ paths:
                   required: true
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/trip.v1.GetDailyTripRequest'
-                required: true
+                - example: ""
+                  in: query
+                  name: tripId
+                  required: false
+                  schema:
+                    type: string
+                - example: ""
+                  in: query
+                  name: dailyId
+                  required: false
+                  schema:
+                    type: string
             responses:
                 "200":
                     content:
@@ -1337,19 +1295,6 @@ paths:
                 - TripService
         put:
             operationId: TripService_UpdateDailyTrip
-            parameters:
-                - example: ""
-                  in: path
-                  name: tripId
-                  required: true
-                  schema:
-                    type: string
-                - example: ""
-                  in: path
-                  name: dailyId
-                  required: true
-                  schema:
-                    type: string
             requestBody:
                 content:
                     application/json:
