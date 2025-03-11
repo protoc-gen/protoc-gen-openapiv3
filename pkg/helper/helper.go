@@ -20,7 +20,7 @@ func GetEnumValues(enum *protogen.Enum) []string {
 	return values
 }
 
-func GetHttpMethodAndPath(method *protogen.Method) (methodPath string, httpMethod string) {
+func GetHttpMethodAndPath(method *protogen.Method) (methodPath string, httpMethod string, additionalBindings []string) {
 	httpRule := proto.GetExtension(method.Desc.Options(), annotations.E_Http).(*annotations.HttpRule)
 	if httpRule != nil {
 		switch pattern := httpRule.Pattern.(type) {
@@ -40,7 +40,23 @@ func GetHttpMethodAndPath(method *protogen.Method) (methodPath string, httpMetho
 			methodPath = pattern.Patch
 			httpMethod = "patch"
 		}
+
+		for _, binding := range httpRule.AdditionalBindings {
+			switch pattern := binding.Pattern.(type) {
+			case *annotations.HttpRule_Post:
+				additionalBindings = append(additionalBindings, pattern.Post)
+			case *annotations.HttpRule_Get:
+				additionalBindings = append(additionalBindings, pattern.Get)
+			case *annotations.HttpRule_Put:
+				additionalBindings = append(additionalBindings, pattern.Put)
+			case *annotations.HttpRule_Delete:
+				additionalBindings = append(additionalBindings, pattern.Delete)
+			case *annotations.HttpRule_Patch:
+				additionalBindings = append(additionalBindings, pattern.Patch)
+			}
+		}
 	}
+
 	return
 }
 

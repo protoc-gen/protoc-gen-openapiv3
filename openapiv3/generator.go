@@ -119,15 +119,15 @@ func GenerateFile(gen *protogen.Plugin) {
 					}
 
 					addMessageSchema(openAPI, method.Output)
-					methodPath, httpMethod := helper.GetHttpMethodAndPath(method)
-					if httpMethod == "get" || httpMethod == "delete" {
-						parameters := extractPathParameters(methodPath, method.Input)
-						if len(parameters) > 0 {
-							operation["parameters"] = parameters
-						}
-					} else {
+					methodPath, httpMethod, bindings := helper.GetHttpMethodAndPath(method)
+					if httpMethod == "post" || httpMethod == "put" || httpMethod == "patch" {
 						operation["requestBody"] = getRequestBody(method.Input)
 						addMessageSchema(openAPI, method.Input)
+					}
+
+					parameters := extractPathParameters(method.Input, methodPath, bindings)
+					if len(parameters) > 0 {
+						operation["parameters"] = parameters
 					}
 
 					if _, ok := paths[methodPath]; !ok {
@@ -294,35 +294,58 @@ func getResponseBody(message *protogen.Message) map[string]any {
 	}
 }
 
-func extractPathParameters(path string, message *protogen.Message) []map[string]any {
-	var parameters []map[string]any
-	// Find all path parameters (e.g., {id})
-	parts := strings.Split(path, "/")
-	for _, part := range parts {
-		if strings.HasPrefix(part, "{") && strings.HasSuffix(part, "}") {
-			paramName := part[1 : len(part)-1]
-			params := map[string]any{
-				"name":     paramName,
-				"in":       "path",
-				"required": true,
-			}
+type extractTarget interface {
+	[]string | string
+}
 
-			if field := helper.GetFieldFromMessage(message, paramName); field != nil {
-				property, example := GetPropertyAndExample(field, nil)
-				params["name"] = field.Desc.JSONName()
-				params["schema"] = property
-				params["example"] = example
-			} else {
-				params["schema"] = map[string]any{
-					"type": "string",
+func extractKeys[T extractTarget](s T) map[string]struct{} {
+	keys := make(map[string]struct{})
+	switch v := any(s).(type) {
+	case []string:
+		for _, vv := range v {
+			// /api/v1/trips?page={page}&size={size}
+			parts := strings.Split(vv, "{")
+			for _, part := range parts[1:] {
+				end := strings.Index(part, "}")
+				if end != -1 {
+					keys[part[:end]] = struct{}{}
 				}
 			}
-			parameters = append(parameters, params)
+		}
+	case string:
+		parts := strings.Split(v, "/")
+		for _, part := range parts {
+			if strings.HasPrefix(part, "{") && strings.HasSuffix(part, "}") {
+				keys[part[1:len(part)-1]] = struct{}{}
+			}
 		}
 	}
+	return keys
+}
 
+func extractPathParameters(message *protogen.Message, uri string, bindings []string) []map[string]any {
+	var parameters []map[string]any
+	pathKeys := extractKeys(uri)
 	for _, field := range message.Fields {
-		if field.Desc.IsExtension() {
+		// only add path parameters that are in the bindings
+		if _, ok := pathKeys[string(field.Desc.Name())]; !ok {
+			continue
+		}
+		params := map[string]any{
+			"name":     field.Desc.JSONName(),
+			"in":       "path",
+			"required": true,
+		}
+		property, example := GetPropertyAndExample(field, nil)
+		params["schema"] = property
+		params["example"] = example
+		parameters = append(parameters, params)
+	}
+
+	queryKeys := extractKeys(bindings)
+	for _, field := range message.Fields {
+		// only add query parameters that are in the bindings
+		if _, ok := queryKeys[string(field.Desc.Name())]; !ok {
 			continue
 		}
 		params := map[string]any{

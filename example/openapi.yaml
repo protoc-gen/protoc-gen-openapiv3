@@ -538,13 +538,6 @@ paths:
     /api/v1/auth/refresh-token:
         get:
             operationId: AuthService_RefreshTokenX
-            parameters:
-                - example: ""
-                  in: query
-                  name: refreshToken
-                  required: false
-                  schema:
-                    type: string
             responses:
                 "200":
                     content:
@@ -834,13 +827,6 @@ paths:
     /api/v1/auth/verify-password-reset-token:
         get:
             operationId: AuthService_VerifyPasswordResetToken
-            parameters:
-                - example: ""
-                  in: query
-                  name: token
-                  required: false
-                  schema:
-                    type: string
             responses:
                 "200":
                     content:
@@ -996,12 +982,6 @@ paths:
                   required: true
                   schema:
                     type: string
-                - example: ""
-                  in: query
-                  name: id
-                  required: false
-                  schema:
-                    type: string
             responses:
                 "200":
                     content:
@@ -1038,12 +1018,6 @@ paths:
                   required: true
                   schema:
                     type: string
-                - example: ""
-                  in: query
-                  name: id
-                  required: false
-                  schema:
-                    type: string
             responses:
                 "200":
                     content:
@@ -1073,6 +1047,13 @@ paths:
                 - TripService
         put:
             operationId: TripService_UpdateTrip
+            parameters:
+                - example: 680b81df-e966-4b51-a63f-1dfa749c04a5
+                  in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1116,12 +1097,6 @@ paths:
                   required: true
                   schema:
                     type: string
-                - example: ""
-                  in: query
-                  name: tripId
-                  required: false
-                  schema:
-                    type: string
             responses:
                 "200":
                     content:
@@ -1151,6 +1126,13 @@ paths:
                 - TripService
         post:
             operationId: TripService_CreateDailyTrip
+            parameters:
+                - example: ""
+                  in: path
+                  name: tripId
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1200,18 +1182,6 @@ paths:
                   required: true
                   schema:
                     type: string
-                - example: ""
-                  in: query
-                  name: tripId
-                  required: false
-                  schema:
-                    type: string
-                - example: ""
-                  in: query
-                  name: dailyId
-                  required: false
-                  schema:
-                    type: string
             responses:
                 "200":
                     content:
@@ -1254,18 +1224,6 @@ paths:
                   required: true
                   schema:
                     type: string
-                - example: ""
-                  in: query
-                  name: tripId
-                  required: false
-                  schema:
-                    type: string
-                - example: ""
-                  in: query
-                  name: dailyId
-                  required: false
-                  schema:
-                    type: string
             responses:
                 "200":
                     content:
@@ -1295,6 +1253,19 @@ paths:
                 - TripService
         put:
             operationId: TripService_UpdateDailyTrip
+            parameters:
+                - example: ""
+                  in: path
+                  name: tripId
+                  required: true
+                  schema:
+                    type: string
+                - example: ""
+                  in: path
+                  name: dailyId
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
