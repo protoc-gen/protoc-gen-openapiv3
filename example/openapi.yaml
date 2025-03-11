@@ -541,6 +541,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.OneClickLoginRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -577,6 +578,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.RefreshTokenRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -612,6 +614,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.RefreshTokenRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -648,6 +651,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.RequestPasswordResetRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -684,6 +688,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.ResetPasswordRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -720,6 +725,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.SendSmsCodeRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -756,6 +762,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.SignInWithOAuthRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -792,6 +799,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.SignInRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -828,6 +836,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.SignUpRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -864,6 +873,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.VerifyPasswordResetTokenRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -900,6 +910,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/auth.v1.VerifySmsCodeRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -936,6 +947,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.ListTripsRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -970,6 +982,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.CreateTripRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -1005,6 +1018,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.DeleteTripRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -1039,6 +1053,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.GetTripRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -1073,6 +1088,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.UpdateTripRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -1108,6 +1124,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.ListDailyTripsRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -1142,6 +1159,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.CreateDailyTripRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -1177,6 +1195,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.DeleteDailyTripRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -1211,6 +1230,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.GetDailyTripRequest'
+                required: true
             responses:
                 "200":
                     content:
@@ -1245,6 +1265,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/trip.v1.UpdateDailyTripRequest'
+                required: true
             responses:
                 "200":
                     content:

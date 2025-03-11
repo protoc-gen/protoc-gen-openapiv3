@@ -297,6 +297,7 @@ func getRequestBody(message *protogen.Message) map[string]any {
 				},
 			},
 		},
+		"required": true,
 	}
 }
 
