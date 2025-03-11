@@ -5,7 +5,6 @@ import (
 	"github.com/protoc-gen/protoc-gen-openapiv3/pkg/helper"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/reflect/protoreflect"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path"
@@ -174,78 +173,22 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 			schema := make(map[string]any)
 			schema["type"] = "object"
 			properties := make(map[string]any)
-			example := make(map[string]any)
+			examples := make(map[string]any)
 
 			// Traverse fields and generate properties
 			for _, field := range message.Fields {
-				property := make(map[string]any)
-				switch field.Desc.Kind() {
-				case protoreflect.BoolKind:
-					property["type"] = "boolean"
-					example[field.Desc.JSONName()] = getExample(field, true)
-				case protoreflect.EnumKind:
-					property["type"] = "string"
-					property["format"] = "enum"
-					// Enum specification:
-					// https://swagger.io/docs/specification/v3_0/data-models/enums/
-					property["enum"] = helper.GetEnumValues(field.Enum)
-					example[field.Desc.JSONName()] = getExample(field, property["enum"].([]string)[0])
-				case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Uint32Kind,
-					protoreflect.Sfixed32Kind, protoreflect.Fixed32Kind:
-					property["type"] = "integer"
-					property["format"] = "int32"
-					example[field.Desc.JSONName()] = getExample(field, 0)
-				case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Uint64Kind,
-					protoreflect.Sfixed64Kind, protoreflect.Fixed64Kind:
-					property["type"] = "integer"
-					property["format"] = "int64"
-					example[field.Desc.JSONName()] = getExample(field, 0)
-				case protoreflect.FloatKind:
-					property["type"] = "number"
-					property["format"] = "float"
-					example[field.Desc.JSONName()] = getExample(field, 0.0)
-				case protoreflect.DoubleKind:
-					property["type"] = "number"
-					property["format"] = "double"
-					example[field.Desc.JSONName()] = getExample(field, 0.0)
-				case protoreflect.StringKind:
-					property["type"] = "string"
-					example[field.Desc.JSONName()] = getExample(field, "")
-				case protoreflect.BytesKind:
-					property["type"] = "string"
-					property["format"] = "byte" // Or use "binary" if needed for base64 encoding
-					example[field.Desc.JSONName()] = getExample(field, "")
-				case protoreflect.MessageKind, protoreflect.GroupKind:
-					if helper.GetSchemaName(field.Message) == "google.protobuf.Timestamp" {
-						// This is google.protobuf.Timestamp, treat it as a date-time string
-						property["type"] = "integer"
-						property["format"] = "int32"
-						example[field.Desc.JSONName()] = getExample(field, 1741589979)
-					} else {
-						// Otherwise, treat it as a regular message and add a reference to the schema
-						addMessageSchema(openAPI, field.Message)
-						property["$ref"] = fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(field.Message))
-					}
-				default:
-					property["type"] = "string"
-					example[field.Desc.JSONName()] = ""
-				}
+				property, example := GetPropertyAndExample(field, func(message *protogen.Message) {
+					addMessageSchema(openAPI, message)
+				})
 
-				if field.Desc.Cardinality() == protoreflect.Repeated {
-					property = map[string]any{
-						"type":  "array",
-						"items": property,
-					}
-				}
-
-				// Add property to schema
+				examples[field.Desc.JSONName()] = example
 				properties[field.Desc.JSONName()] = property
 			}
 
 			// Add generated properties to schema
 			schema["properties"] = properties
-			if len(example) > 0 {
-				schema["example"] = example
+			if len(examples) > 0 {
+				schema["example"] = examples
 			}
 
 			// Add schema to components/schemas
@@ -366,8 +309,9 @@ func extractPathParameters(path string, message *protogen.Message) []map[string]
 
 			if field := helper.GetFieldFromMessage(message, paramName); field != nil {
 				property, example := GetPropertyAndExample(field, nil)
+				params["name"] = field.Desc.JSONName()
 				params["schema"] = property
-				params["example"] = example[field.Desc.JSONName()]
+				params["example"] = example
 			} else {
 				params["schema"] = map[string]any{
 					"type": "string",

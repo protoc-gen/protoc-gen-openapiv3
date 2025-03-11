@@ -69,52 +69,54 @@ func getExample[T openAPITypes](field *protogen.Field, defValue T) T {
 
 type nestedMessageCallback func(*protogen.Message)
 
-func GetPropertyAndExample(field *protogen.Field, nestedMessageCallback nestedMessageCallback) (map[string]interface{}, map[string]interface{}) {
-	var property = make(map[string]interface{})
-	var example = make(map[string]interface{})
+func GetPropertyAndExample(field *protogen.Field, nestedMessageCallback nestedMessageCallback) (map[string]interface{}, any) {
+	var (
+		property = make(map[string]interface{})
+		example  any
+	)
 
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
 		property["type"] = "boolean"
-		example[field.Desc.JSONName()] = getExample(field, true)
+		example = getExample(field, true)
 	case protoreflect.EnumKind:
 		property["type"] = "string"
 		property["format"] = "enum"
 		// Enum specification:
 		// https://swagger.io/docs/specification/v3_0/data-models/enums/
 		property["enum"] = helper.GetEnumValues(field.Enum)
-		example[field.Desc.JSONName()] = getExample(field, property["enum"].([]string)[0])
+		example = getExample(field, property["enum"].([]string)[0])
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Uint32Kind,
 		protoreflect.Sfixed32Kind, protoreflect.Fixed32Kind:
 		property["type"] = "integer"
 		property["format"] = "int32"
-		example[field.Desc.JSONName()] = getExample(field, 0)
+		example = getExample(field, 0)
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Uint64Kind,
 		protoreflect.Sfixed64Kind, protoreflect.Fixed64Kind:
 		property["type"] = "integer"
 		property["format"] = "int64"
-		example[field.Desc.JSONName()] = getExample(field, 0)
+		example = getExample(field, 0)
 	case protoreflect.FloatKind:
 		property["type"] = "number"
 		property["format"] = "float"
-		example[field.Desc.JSONName()] = getExample(field, 0.0)
+		example = getExample(field, 0.0)
 	case protoreflect.DoubleKind:
 		property["type"] = "number"
 		property["format"] = "double"
-		example[field.Desc.JSONName()] = getExample(field, 0.0)
+		example = getExample(field, 0.0)
 	case protoreflect.StringKind:
 		property["type"] = "string"
-		example[field.Desc.JSONName()] = getExample(field, "")
+		example = getExample(field, "")
 	case protoreflect.BytesKind:
 		property["type"] = "string"
 		property["format"] = "byte" // Or use "binary" if needed for base64 encoding
-		example[field.Desc.JSONName()] = getExample(field, "")
+		example = getExample(field, "")
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		if helper.GetSchemaName(field.Message) == "google.protobuf.Timestamp" {
 			// This is google.protobuf.Timestamp, treat it as a date-time string
 			property["type"] = "integer"
 			property["format"] = "int32"
-			example[field.Desc.JSONName()] = getExample(field, 1741589979)
+			example = getExample(field, 1741589979)
 		} else {
 			// Otherwise, treat it as a regular message and add a reference to the schema
 			if nestedMessageCallback != nil {
@@ -124,7 +126,7 @@ func GetPropertyAndExample(field *protogen.Field, nestedMessageCallback nestedMe
 		}
 	default:
 		property["type"] = "string"
-		example[field.Desc.JSONName()] = ""
+		example = ""
 	}
 
 	if field.Desc.Cardinality() == protoreflect.Repeated {

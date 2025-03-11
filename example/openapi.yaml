@@ -297,6 +297,8 @@ components:
                     type: string
             type: object
         trip.v1.CreateDailyTripResponse:
+            example:
+                dailyTrip: null
             properties:
                 dailyTrip:
                     $ref: '#/components/schemas/trip.v1.DailyTrip'
@@ -320,6 +322,8 @@ components:
                     type: string
             type: object
         trip.v1.CreateTripResponse:
+            example:
+                trip: null
             properties:
                 trip:
                     $ref: '#/components/schemas/trip.v1.Trip'
@@ -395,6 +399,8 @@ components:
                     type: string
             type: object
         trip.v1.GetDailyTripResponse:
+            example:
+                dailyTrip: null
             properties:
                 dailyTrip:
                     $ref: '#/components/schemas/trip.v1.DailyTrip'
@@ -407,6 +413,8 @@ components:
                     type: string
             type: object
         trip.v1.GetTripResponse:
+            example:
+                trip: null
             properties:
                 trip:
                     $ref: '#/components/schemas/trip.v1.Trip'
@@ -419,6 +427,8 @@ components:
                     type: string
             type: object
         trip.v1.ListDailyTripsResponse:
+            example:
+                dailyTrips: null
             properties:
                 dailyTrips:
                     items:
@@ -429,6 +439,8 @@ components:
             properties: {}
             type: object
         trip.v1.ListTripsResponse:
+            example:
+                trips: null
             properties:
                 trips:
                     items:
@@ -489,6 +501,8 @@ components:
                     type: string
             type: object
         trip.v1.UpdateDailyTripResponse:
+            example:
+                dailyTrip: null
             properties:
                 dailyTrip:
                     $ref: '#/components/schemas/trip.v1.DailyTrip'
@@ -518,6 +532,8 @@ components:
                     type: string
             type: object
         trip.v1.UpdateTripResponse:
+            example:
+                trip: null
             properties:
                 trip:
                     $ref: '#/components/schemas/trip.v1.Trip'
@@ -1143,7 +1159,7 @@ paths:
             parameters:
                 - example: ""
                   in: path
-                  name: trip_id
+                  name: tripId
                   required: true
                   schema:
                     type: string
@@ -1185,7 +1201,7 @@ paths:
             parameters:
                 - example: ""
                   in: path
-                  name: trip_id
+                  name: tripId
                   required: true
                   schema:
                     type: string
@@ -1228,13 +1244,13 @@ paths:
             parameters:
                 - example: ""
                   in: path
-                  name: trip_id
+                  name: tripId
                   required: true
                   schema:
                     type: string
                 - example: ""
                   in: path
-                  name: daily_id
+                  name: dailyId
                   required: true
                   schema:
                     type: string
@@ -1276,13 +1292,13 @@ paths:
             parameters:
                 - example: ""
                   in: path
-                  name: trip_id
+                  name: tripId
                   required: true
                   schema:
                     type: string
                 - example: ""
                   in: path
-                  name: daily_id
+                  name: dailyId
                   required: true
                   schema:
                     type: string
@@ -1324,13 +1340,13 @@ paths:
             parameters:
                 - example: ""
                   in: path
-                  name: trip_id
+                  name: tripId
                   required: true
                   schema:
                     type: string
                 - example: ""
                   in: path
-                  name: daily_id
+                  name: dailyId
                   required: true
                   schema:
                     type: string
