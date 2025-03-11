@@ -97,7 +97,7 @@ message GetTripResponse {
 }
 
 message UpdateTripRequest {
-  string id = 1;
+  string id = 1 [(openapiv3.example) = {value: "680b81df-e966-4b51-a63f-1dfa749c04a5"}];
   string title = 2;
   string description = 3;
   google.protobuf.Timestamp start_ts = 4;

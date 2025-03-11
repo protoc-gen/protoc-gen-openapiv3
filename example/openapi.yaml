@@ -497,7 +497,7 @@ components:
             example:
                 description: ""
                 endTs: 1741589979
-                id: ""
+                id: 680b81df-e966-4b51-a63f-1dfa749c04a5
                 startTs: 1741589979
                 status: true
                 title: ""
@@ -1013,6 +1013,13 @@ paths:
     /api/v1/trips/{id}:
         delete:
             operationId: TripService_DeleteTrip
+            parameters:
+                - example: ""
+                  in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1048,6 +1055,13 @@ paths:
                 - TripService
         get:
             operationId: TripService_GetTrip
+            parameters:
+                - example: ""
+                  in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1083,6 +1097,13 @@ paths:
                 - TripService
         put:
             operationId: TripService_UpdateTrip
+            parameters:
+                - example: 680b81df-e966-4b51-a63f-1dfa749c04a5
+                  in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1119,6 +1140,13 @@ paths:
     /api/v1/trips/{trip_id}/daily:
         get:
             operationId: TripService_ListDailyTrips
+            parameters:
+                - example: ""
+                  in: path
+                  name: trip_id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1154,6 +1182,13 @@ paths:
                 - TripService
         post:
             operationId: TripService_CreateDailyTrip
+            parameters:
+                - example: ""
+                  in: path
+                  name: trip_id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1190,6 +1225,19 @@ paths:
     /api/v1/trips/{trip_id}/daily/{daily_id}:
         delete:
             operationId: TripService_DeleteDailyTrip
+            parameters:
+                - example: ""
+                  in: path
+                  name: trip_id
+                  required: true
+                  schema:
+                    type: string
+                - example: ""
+                  in: path
+                  name: daily_id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1225,6 +1273,19 @@ paths:
                 - TripService
         get:
             operationId: TripService_GetDailyTrip
+            parameters:
+                - example: ""
+                  in: path
+                  name: trip_id
+                  required: true
+                  schema:
+                    type: string
+                - example: ""
+                  in: path
+                  name: daily_id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
@@ -1260,6 +1321,19 @@ paths:
                 - TripService
         put:
             operationId: TripService_UpdateDailyTrip
+            parameters:
+                - example: ""
+                  in: path
+                  name: trip_id
+                  required: true
+                  schema:
+                    type: string
+                - example: ""
+                  in: path
+                  name: daily_id
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:

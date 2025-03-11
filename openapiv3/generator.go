@@ -122,6 +122,11 @@ func GenerateFile(gen *protogen.Plugin) {
 
 					// Add operation to paths
 					methodPath, httpMethod := helper.GetHttpMethodAndPath(method)
+					parameters := extractPathParameters(methodPath, method.Input)
+					if len(parameters) > 0 {
+						operation["parameters"] = parameters
+					}
+
 					if _, ok := paths[methodPath]; !ok {
 						paths[methodPath] = make(map[string]any)
 					}
@@ -344,4 +349,32 @@ func getResponseBody(message *protogen.Message) map[string]any {
 			},
 		},
 	}
+}
+
+func extractPathParameters(path string, message *protogen.Message) []map[string]any {
+	var parameters []map[string]any
+	// Find all path parameters (e.g., {id})
+	parts := strings.Split(path, "/")
+	for _, part := range parts {
+		if strings.HasPrefix(part, "{") && strings.HasSuffix(part, "}") {
+			paramName := part[1 : len(part)-1]
+			params := map[string]any{
+				"name":     paramName,
+				"in":       "path",
+				"required": true,
+			}
+
+			if field := helper.GetFieldFromMessage(message, paramName); field != nil {
+				property, example := GetPropertyAndExample(field, nil)
+				params["schema"] = property
+				params["example"] = example[field.Desc.JSONName()]
+			} else {
+				params["schema"] = map[string]any{
+					"type": "string",
+				}
+			}
+			parameters = append(parameters, params)
+		}
+	}
+	return parameters
 }

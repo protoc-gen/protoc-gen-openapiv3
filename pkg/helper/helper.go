@@ -43,3 +43,12 @@ func GetHttpMethodAndPath(method *protogen.Method) (methodPath string, httpMetho
 	}
 	return
 }
+
+func GetFieldFromMessage(message *protogen.Message, fieldName string) *protogen.Field {
+	for _, field := range message.Fields {
+		if string(field.Desc.Name()) == fieldName {
+			return field
+		}
+	}
+	return nil
+}
