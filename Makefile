@@ -3,6 +3,7 @@
 init:
 	go mod tidy
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.3
+	go install github.com/protoc-gen/protoc-gen-validatex@v0.8.2
 
 .PHONY: openapiv3
 # generate openapiv3

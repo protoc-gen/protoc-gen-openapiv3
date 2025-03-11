@@ -398,13 +398,13 @@ components:
             type: object
         trip.v1.Trip:
             example:
-                createdAt: 1741595194
+                createdAt: 1741589979
                 description: ""
                 endTs: 1741589979
-                id: 680b81df-e966-4b51-a63f-1dfa749c04a5
+                id: ""
                 startTs: 1741589979
                 status: true
-                title: My Trip
+                title: ""
                 updatedAt: 1741589979
             properties:
                 createdAt:
@@ -432,7 +432,7 @@ components:
             example:
                 dailyId: ""
                 date: 1741589979
-                day: 7
+                day: 0
                 notes: ""
                 tripId: ""
             properties:
@@ -460,7 +460,7 @@ components:
             example:
                 description: ""
                 endTs: 1741589979
-                id: 680b81df-e966-4b51-a63f-1dfa749c04a5
+                id: ""
                 startTs: 1741589979
                 status: true
                 title: ""
@@ -532,9 +532,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/refresh-token:
         get:
             operationId: AuthService_RefreshTokenX
@@ -563,9 +562,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
         post:
             operationId: AuthService_RefreshToken
             requestBody:
@@ -599,9 +597,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/request-password-reset:
         post:
             operationId: AuthService_RequestPasswordReset
@@ -636,9 +633,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/reset-password:
         post:
             operationId: AuthService_ResetPassword
@@ -673,9 +669,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/send-sms-code:
         post:
             operationId: AuthService_SendSmsCode
@@ -710,9 +705,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/sign-in/oauth:
         post:
             operationId: AuthService_SignInWithOAuth
@@ -747,9 +741,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/sign-in/password:
         post:
             operationId: AuthService_SignIn
@@ -784,9 +777,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/sign-up:
         post:
             operationId: AuthService_SignUp
@@ -821,9 +813,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/verify-password-reset-token:
         get:
             operationId: AuthService_VerifyPasswordResetToken
@@ -852,9 +843,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/auth/verify-sms-code:
         post:
             operationId: AuthService_VerifySmsCode
@@ -889,9 +879,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/InternalServerError'
                     description: Internal Server Error
-            security: []
             tags:
-                - Auth Service
+                - AuthService
     /api/v1/trips:
         get:
             operationId: TripService_ListTrips
@@ -1048,7 +1037,7 @@ paths:
         put:
             operationId: TripService_UpdateTrip
             parameters:
-                - example: 680b81df-e966-4b51-a63f-1dfa749c04a5
+                - example: ""
                   in: path
                   name: id
                   required: true
@@ -1307,7 +1296,7 @@ servers:
     - description: Prod Server
       url: https://localhost:9000
 tags:
-    - description: Authentication service
-      name: Auth Service
     - description: ""
       name: TripService
+    - description: ""
+      name: AuthService

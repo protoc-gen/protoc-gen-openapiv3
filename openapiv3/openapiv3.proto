@@ -26,14 +26,14 @@ message Example {
 }
 
 extend google.protobuf.MethodOptions {
-  Method method = 50000;
+  Method method = 60000;
 }
 
 extend google.protobuf.ServiceOptions {
-  Service service = 50000;
+  Service service = 60000;
 }
 
 extend google.protobuf.FieldOptions {
-  Field field = 50000;
-  Example example = 50001;
+  Field field = 60000;
+  Example example = 60001;
 }
