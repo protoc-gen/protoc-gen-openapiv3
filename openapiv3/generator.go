@@ -226,6 +226,13 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 					example[field.Desc.JSONName()] = ""
 				}
 
+				if field.Desc.Cardinality() == protoreflect.Repeated {
+					property = map[string]any{
+						"type":  "array",
+						"items": property,
+					}
+				}
+
 				// Add property to schema
 				properties[field.Desc.JSONName()] = property
 			}

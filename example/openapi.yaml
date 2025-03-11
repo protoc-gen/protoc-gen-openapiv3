@@ -421,7 +421,9 @@ components:
         trip.v1.ListDailyTripsResponse:
             properties:
                 dailyTrips:
-                    $ref: '#/components/schemas/trip.v1.DailyTrip'
+                    items:
+                        $ref: '#/components/schemas/trip.v1.DailyTrip'
+                    type: array
             type: object
         trip.v1.ListTripsRequest:
             properties: {}
@@ -429,7 +431,9 @@ components:
         trip.v1.ListTripsResponse:
             properties:
                 trips:
-                    $ref: '#/components/schemas/trip.v1.Trip'
+                    items:
+                        $ref: '#/components/schemas/trip.v1.Trip'
+                    type: array
             type: object
         trip.v1.Trip:
             example:
