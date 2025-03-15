@@ -2,13 +2,15 @@ package openapiv3
 
 import (
 	"fmt"
+	"os"
+	"path"
+	"sort"
+	"strings"
+
 	"github.com/protoc-gen/protoc-gen-openapiv3/pkg/helper"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"gopkg.in/yaml.v3"
-	"os"
-	"path"
-	"strings"
 )
 
 // GenerateFile traverses all proto files and generates the OpenAPI specification file
@@ -148,6 +150,10 @@ func GenerateFile(gen *protogen.Plugin) {
 			"description": desc,
 		})
 	}
+	// sort tags by name
+	sort.Slice(tags, func(i, j int) bool {
+		return tags[i]["name"].(string) < tags[j]["name"].(string)
+	})
 	openAPI["tags"] = tags
 
 	// Generate OpenAPI YAML file
