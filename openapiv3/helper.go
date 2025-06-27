@@ -2,11 +2,12 @@ package openapiv3
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/protoc-gen/protoc-gen-openapiv3/pkg/helper"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
-	"strconv"
 )
 
 func GetServiceName(svc *protogen.Service) string {
@@ -131,7 +132,41 @@ func GetPropertyAndExample(field *protogen.Field, nestedMessageCallback nestedMe
 		example = ""
 	}
 
-	if field.Desc.Cardinality() == protoreflect.Repeated {
+	// Handle maps before repeated fields since maps are also repeated
+	if field.Desc.IsMap() {
+		// For protobuf maps, we need to determine the value type from the map entry message
+		// Maps in protobuf are compiled to repeated fields with a synthetic message containing key/value fields
+		var valueProperty map[string]any
+		var valueExample any
+		
+		if field.Message != nil {
+			// Find the value field in the map entry message
+			valueField := helper.GetFieldFromMessage(field.Message, "value")
+			if valueField != nil {
+				valueProperty, valueExample = GetPropertyAndExample(valueField, nestedMessageCallback)
+			} else {
+				// Fallback to string type if we can't find the value field
+				valueProperty = map[string]any{"type": "string"}
+				valueExample = "value"
+			}
+		} else {
+			// Fallback to string type
+			valueProperty = map[string]any{"type": "string"}
+			valueExample = "value"
+		}
+		
+		// Create the proper OpenAPI map representation
+		property = map[string]any{
+			"type":                 "object",
+			"additionalProperties": valueProperty,
+		}
+		
+		// Create example with proper key-value structure
+		example = map[string]any{
+			"key1": valueExample,
+			"key2": valueExample,
+		}
+	} else if field.Desc.Cardinality() == protoreflect.Repeated {
 		property = map[string]any{
 			"type":  "array",
 			"items": property,
@@ -151,18 +186,18 @@ func generateExampleForMessage(message *protogen.Message) map[string]any {
 func generateExampleForMessageWithVisited(message *protogen.Message, visited map[string]bool) map[string]any {
 	example := make(map[string]any)
 	schemaName := helper.GetSchemaName(message)
-	
+
 	// Prevent infinite recursion by checking if we've already visited this message
 	if visited[schemaName] {
 		return example // Return empty object for circular references
 	}
-	
+
 	visited[schemaName] = true
 	defer func() { delete(visited, schemaName) }() // Clean up after processing
-	
+
 	for _, field := range message.Fields {
 		var fieldExample any
-		
+
 		switch field.Desc.Kind() {
 		case protoreflect.MessageKind, protoreflect.GroupKind:
 			if helper.GetSchemaName(field.Message) == "google.protobuf.Timestamp" {
@@ -175,12 +210,15 @@ func generateExampleForMessageWithVisited(message *protogen.Message, visited map
 			// For non-message types, use the existing logic
 			_, fieldExample = GetPropertyAndExample(field, nil)
 		}
-		
-		// Handle repeated fields
-		if field.Desc.Cardinality() == protoreflect.Repeated {
+
+		// Handle maps and repeated fields
+		if field.Desc.IsMap() {
+			// For maps, generate examples using GetPropertyAndExample which handles the map logic
+			_, fieldExample = GetPropertyAndExample(field, nil)
+		} else if field.Desc.Cardinality() == protoreflect.Repeated {
 			fieldExample = []any{fieldExample}
 		}
-		
+
 		example[field.Desc.JSONName()] = fieldExample
 	}
 
