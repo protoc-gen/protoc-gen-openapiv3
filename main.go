@@ -1,15 +1,19 @@
 package main
 
 import (
-	"github.com/protoc-gen/protoc-gen-openapiv3/openapiv3"
-	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
 	"google.golang.org/protobuf/compiler/protogen"
+
+	"github.com/protoc-gen/protoc-gen-openapiv3/openapiv3"
 )
 
 func main() {
 	protogen.Options{}.Run(func(gen *protogen.Plugin) error {
-		openapiv3.GenerateFile(gen)
-		gen.SupportedFeatures = gengo.SupportedFeatures
+		for _, f := range gen.Files {
+			if !f.Generate {
+				continue
+			}
+			openapiv3.GenerateFile(gen, f)
+		}
 		return nil
 	})
 }
