@@ -143,10 +143,44 @@ func GetPropertyAndExample(field *protogen.Field, nestedMessageCallback nestedMe
 
 // generateExampleForMessage creates an example object for a protobuf message
 func generateExampleForMessage(message *protogen.Message) map[string]any {
-	example := make(map[string]any)
+	return generateExampleForMessageWithVisited(message, make(map[string]bool))
+}
 
+// generateExampleForMessageWithVisited creates an example object for a protobuf message,
+// tracking visited messages to prevent infinite recursion
+func generateExampleForMessageWithVisited(message *protogen.Message, visited map[string]bool) map[string]any {
+	example := make(map[string]any)
+	schemaName := helper.GetSchemaName(message)
+	
+	// Prevent infinite recursion by checking if we've already visited this message
+	if visited[schemaName] {
+		return example // Return empty object for circular references
+	}
+	
+	visited[schemaName] = true
+	defer func() { delete(visited, schemaName) }() // Clean up after processing
+	
 	for _, field := range message.Fields {
-		_, fieldExample := GetPropertyAndExample(field, nil) // Don't recursively add schemas here
+		var fieldExample any
+		
+		switch field.Desc.Kind() {
+		case protoreflect.MessageKind, protoreflect.GroupKind:
+			if helper.GetSchemaName(field.Message) == "google.protobuf.Timestamp" {
+				fieldExample = getExample(field, 1741589979)
+			} else {
+				// Generate nested example recursively
+				fieldExample = generateExampleForMessageWithVisited(field.Message, visited)
+			}
+		default:
+			// For non-message types, use the existing logic
+			_, fieldExample = GetPropertyAndExample(field, nil)
+		}
+		
+		// Handle repeated fields
+		if field.Desc.Cardinality() == protoreflect.Repeated {
+			fieldExample = []any{fieldExample}
+		}
+		
 		example[field.Desc.JSONName()] = fieldExample
 	}
 
