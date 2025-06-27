@@ -122,6 +122,8 @@ func GetPropertyAndExample(field *protogen.Field, nestedMessageCallback nestedMe
 			if nestedMessageCallback != nil {
 				nestedMessageCallback(field.Message)
 				property["$ref"] = fmt.Sprintf("#/components/schemas/%s", helper.GetSchemaName(field.Message))
+				// Generate a proper example object for nested messages instead of null
+				example = generateExampleForMessage(field.Message)
 			}
 		}
 	default:
@@ -137,4 +139,16 @@ func GetPropertyAndExample(field *protogen.Field, nestedMessageCallback nestedMe
 	}
 
 	return property, example
+}
+
+// generateExampleForMessage creates an example object for a protobuf message
+func generateExampleForMessage(message *protogen.Message) map[string]any {
+	example := make(map[string]any)
+
+	for _, field := range message.Fields {
+		_, fieldExample := GetPropertyAndExample(field, nil) // Don't recursively add schemas here
+		example[field.Desc.JSONName()] = fieldExample
+	}
+
+	return example
 }
