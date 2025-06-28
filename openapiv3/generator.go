@@ -2,19 +2,18 @@ package openapiv3
 
 import (
 	"fmt"
-	"os"
-	"path"
 	"sort"
 	"strings"
 
-	"github.com/protoc-gen/protoc-gen-openapiv3/pkg/helper"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"gopkg.in/yaml.v3"
+
+	"github.com/protoc-gen/protoc-gen-openapiv3/pkg/helper"
 )
 
 // GenerateFile traverses all proto files and generates the OpenAPI specification file
-func GenerateFile(gen *protogen.Plugin) {
+func GenerateFile(gen *protogen.Plugin, f *protogen.File) {
 	paths := make(map[string]map[string]any)
 	commonResp := map[string]any{
 		"type": "object",
@@ -163,11 +162,8 @@ func GenerateFile(gen *protogen.Plugin) {
 		return
 	}
 
-	// Save to file
-	err = os.WriteFile(getOutputFilename(gen), openAPIDocument, 0644)
-	if err != nil {
-		fmt.Println("Error writing OpenAPI file:", err)
-	}
+	generatedFile := gen.NewGeneratedFile(f.GeneratedFilenamePrefix+"_openapi.yaml", f.GoImportPath)
+	generatedFile.P(string(openAPIDocument))
 }
 
 // addMessageSchema adds proto message types to OpenAPI components
@@ -201,21 +197,6 @@ func addMessageSchema(openAPI map[string]any, message *protogen.Message) {
 			schemas[schemaName] = schema
 		}
 	}
-}
-
-// getOutputFilename extracts the output file path from plugin options
-func getOutputFilename(gen *protogen.Plugin) string {
-	parts := strings.Split(gen.Request.GetParameter(), ",")
-
-	filename := "openapi.yaml"
-	// TODO: is it possible to read the --openapiv3_out=paths=source_relative:./example from the plugin options?
-	for _, part := range parts {
-		if strings.HasPrefix(part, "openapi_out_path=") {
-			return path.Join(strings.TrimPrefix(part, "openapi_out_path="), filename)
-		}
-	}
-
-	return filename
 }
 
 // parseServersOption parses the servers option from the plugin options
